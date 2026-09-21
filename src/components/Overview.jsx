@@ -5,6 +5,8 @@ import LineChart from '../charts/LineChart.jsx';
 import BarChart from '../charts/BarChart.jsx';
 import Dispersion, { dispersionStats } from '../charts/Dispersion.jsx';
 import Gapping from '../charts/Gapping.jsx';
+import Radar, { scale } from '../charts/Radar.jsx';
+import FlightView from '../charts/FlightView.jsx';
 import { BENCHMARKS as B } from '../db/index.js';
 import { roundSummary, driverSessions, goalProgress, goalFor, latestByClub, fmt, shortDate } from '../lib/stats.js';
 import { Tile } from './ui.jsx';
@@ -38,6 +40,16 @@ export default function Overview({ player, sessions, rounds, goals, lessons = []
   const hs = hero ? dispersionStats(hero.shotList) : null;
   const hsPrev = drvWithShots.length > 1 ? dispersionStats(drvWithShots.at(-2).shotList) : null;
   const latest = useMemo(() => latestByClub(sessions), [sessions]);
+  const i7 = sessions.filter(x => /7 iron/i.test(x.club)).at(-1);
+  const axes = [
+    { key: 'speed', label: 'Speed', value: scale(dl?.chs, B.chs.scratch, B.chs.d1, B.chs.tour), ref: 70 },
+    { key: 'distance', label: 'Distance', value: scale(hs?.carry, B.carry.scratch, B.carry.d1, B.carry.tour), ref: 70 },
+    { key: 'irons', label: 'Irons', value: scale(i7?.carry, B.iron7.scratch, B.iron7.d1, B.iron7.tour), ref: 70 },
+    { key: 'accuracy', label: 'Accuracy', value: hs ? Math.min(100, hs.fairwayPct * 1.25) : null, ref: 70 },
+    { key: 'greens', label: 'Greens', value: scale(s.gir, B.gir.scratch, B.gir.d1, B.gir.tour), ref: 70 },
+    { key: 'putting', label: 'Putting', value: scale(s.putts, B.putts.scratch, B.putts.d1, B.putts.tour, true), ref: 70 },
+    { key: 'scoring', label: 'Scoring', value: scale(s.scoring, B.score.scratch, B.score.d1, B.score.tour, true), ref: 70 },
+  ];
 
   // Rings: Speed (club speed vs target), Strike (smash vs target), Accuracy (fairway % vs 70)
   const rings = [
@@ -95,6 +107,21 @@ export default function Overview({ player, sessions, rounds, goals, lessons = []
       </div>
 
       <div className="grid grid-hero" style={{ marginTop: 14 }}>
+        <div className="card radar-card">
+          <div><div className="date-line">Player profile</div><h3>Attributes vs D1</h3><div className="sub">100 = Tour · 70 = D1 outline · 50 = scratch</div></div>
+          <Radar axes={axes} size={320} />
+        </div>
+        <div style={{ display: 'grid', gap: 14, alignContent: 'start' }}>
+          <div className="hero">
+            <div className="hero-head"><div className="title"><h3>Ball flight</h3>{hero && <span className="muted small">driver · every shot</span>}</div></div>
+            <FlightView shots={hero?.shotList || []} benchmarks={[{ label: 'D1 270', v: B.carry.d1 }, { label: 'Tour 282', v: B.carry.tour, cls: 'gold' }]} />
+            <div className="legend"><span>Each shot</span><span className="best">Longest</span></div>
+          </div>
+          <div className="card"><h3>Club gapping</h3><div className="sub">Latest carry per club</div><Gapping latest={latest} /></div>
+        </div>
+      </div>
+
+      <div className="grid grid-hero" style={{ marginTop: 14 }}>
         <div className="hero">
           <div className="hero-head">
             <div className="title"><h3>Driver dispersion</h3>{hero && <span className="muted small">{hero.shots} shots · {hero.notes || hero.date}</span>}</div>
@@ -108,14 +135,12 @@ export default function Overview({ player, sessions, rounds, goals, lessons = []
             <div className="hstat"><div className="k">Miss bias</div><div className="v txt">{hs.left > hs.right ? 'Left' : hs.right > hs.left ? 'Right' : 'Even'}<small>{Math.max(hs.left, hs.right)} of {hs.n}</small></div></div>
           </div>}
         </div>
-        <div style={{ display: 'grid', gap: 14, alignContent: 'start' }}>
-          <div className="card"><h3>Club gapping</h3><div className="sub">Latest carry per club</div><Gapping latest={latest} /></div>
-          <div className="group">
-            <div className="group-title"><h3>Lesson prep</h3><span className="hint">before you walk in</span></div>
-            <div className="row"><div className="grow"><div className="label">Since last lesson</div><div className="sub">{lastLesson ? `${lastLesson.focus} · ${daysSince(lastLesson.date)} days ago` : 'No lesson logged yet'}</div></div></div>
-            {lastLesson?.priorities?.length > 0 && <div className="row" style={{ paddingTop: 0 }}><div>{lastLesson.priorities.map((p, i) => <span className="tag" key={i}>{p}</span>)}</div></div>}
-            <div className="row"><div className="grow"><div className="label">Latest driver</div><div className="sub num">{dl ? `${fmt(dl.chs, 1)} mph · smash ${fmt(dl.smash, 2)} · path ${dl.path > 0 ? '+' : ''}${fmt(dl.path, 1)}° · face-path ${dl.ftp > 0 ? '+' : ''}${fmt(dl.ftp, 1)}°` : 'No TrackMan session yet'}</div></div></div>
-          </div>
+        <div className="group">
+          <div className="group-title"><h3>Lesson prep</h3><span className="hint">before you walk in</span></div>
+          <div className="row"><div className="grow"><div className="label">Since last lesson</div><div className="sub">{lastLesson ? `${lastLesson.focus} · ${daysSince(lastLesson.date)} days ago` : 'No lesson logged yet'}</div></div></div>
+          {lastLesson?.priorities?.length > 0 && <div className="row" style={{ paddingTop: 0 }}><div>{lastLesson.priorities.map((p, i) => <span className="tag" key={i}>{p}</span>)}</div></div>}
+          <div className="row"><div className="grow"><div className="label">Latest driver</div><div className="sub num">{dl ? `${fmt(dl.chs, 1)} mph · smash ${fmt(dl.smash, 2)} · path ${dl.path > 0 ? '+' : ''}${fmt(dl.path, 1)}° · face-path ${dl.ftp > 0 ? '+' : ''}${fmt(dl.ftp, 1)}°` : 'No TrackMan session yet'}</div></div></div>
+          <div className="row"><div className="grow"><div className="label">Last round</div><div className="sub num">{lr ? `${lr.date} · ${lr.course} · ${lr.score} (${lr.score - lr.par >= 0 ? '+' : ''}${lr.score - lr.par}) · GIR ${lr.gir ?? '—'} · putts ${lr.putts ?? '—'}` : 'No round logged yet'}</div></div></div>
         </div>
       </div>
 

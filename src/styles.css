@@ -380,3 +380,49 @@ svg.chart .lab { fill: var(--ink); font-weight: 700; font-size: 12px; }
 .share-btn { background: rgba(255,255,255,0.22); color: #fff; }
 .share-btn:first-child { background: #fff; color: #c8003f; }
 .share-url { width: 100%; border: 0; border-radius: 12px; padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; background: rgba(255,255,255,0.18); color: #fff; }
+
+/* ---------- research-driven charts ---------- */
+:root { --sky-hi: #dff0ff; --sky-lo: #f6fbff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sky-hi: #0b1f33; --sky-lo: #0d1520; } }
+:root[data-theme="dark"] { --sky-hi: #0b1f33; --sky-lo: #0d1520; }
+svg.flight .ground { stroke: var(--strike); stroke-width: 2.5; }
+svg.flight .flight { fill: none; stroke: var(--speed); stroke-width: 1.6; opacity: 0.55; stroke-linecap: round; }
+svg.flight .flight.best { stroke: var(--speed); stroke-width: 2.6; opacity: 1; }
+svg.flight .apex { fill: var(--speed); stroke: var(--card); stroke-width: 2; }
+svg.flight .bench { stroke: var(--blue); stroke-dasharray: 4 4; stroke-width: 1.2; }
+svg.flight .bench.gold { stroke: var(--gold); }
+svg.flight .bench-lab { fill: var(--blue); font-size: 10.5px; font-weight: 700; }
+svg.flight .bench-lab.gold { fill: #d69500; }
+.legend .best::before { background: var(--speed); height: 6px; }
+svg.chart .window { fill: rgba(48,209,88,0.14); stroke: var(--strike); stroke-dasharray: 4 4; stroke-width: 1.2; }
+svg.chart .window-lab { fill: var(--good); font-size: 11px; font-weight: 700; }
+svg.chart .dot { stroke: var(--card); stroke-width: 1.5; opacity: 0.92; }
+svg.chart .axis-lab { font-size: 10.5px; }
+.legend .lw-lo::before { background: var(--speed); } .legend .lw-hi::before { background: var(--accuracy); } .legend .lw-n::before { display: none; } .legend .lw-n { margin-left: auto; font-weight: 700; color: var(--ink); }
+.radar-card { display: grid; gap: 8px; justify-items: center; }
+.radar-card > div:first-child { justify-self: start; width: 100%; }
+svg.radar { width: 100%; max-width: 340px; height: auto; display: block; }
+svg.radar .ring { fill: none; stroke: var(--line); }
+svg.radar .spoke { stroke: var(--line); }
+svg.radar .refp { fill: rgba(0,122,255,0.08); stroke: var(--blue); stroke-width: 1.2; stroke-dasharray: 4 3; }
+svg.radar .you { fill: rgba(250,17,79,0.18); stroke: var(--speed); stroke-width: 2.2; stroke-linejoin: round; }
+svg.radar .youdot { fill: var(--speed); stroke: var(--card); stroke-width: 2; }
+svg.radar .lab { font-family: var(--text); font-size: 11.5px; font-weight: 700; fill: var(--ink); }
+svg.radar .val { font-family: var(--display); font-size: 12px; font-weight: 700; fill: var(--ink-3); }
+svg.chart .wf.abs { fill: var(--ink); opacity: 0.85; }
+svg.chart .wf.lost { fill: var(--bad); } svg.chart .wf.gained { fill: var(--good); }
+svg.chart .connector { stroke: var(--line); stroke-dasharray: 2 3; }
+.clock-wrap { display: grid; grid-template-columns: 180px 1fr; gap: 14px; align-items: center; }
+@media (max-width: 480px) { .clock-wrap { grid-template-columns: 1fr; justify-items: center; } }
+svg.clock { width: 180px; height: 180px; }
+svg.clock .ring { fill: rgba(118,118,128,0.08); stroke: var(--line); }
+svg.clock .target { stroke: var(--ink-3); stroke-dasharray: 3 4; }
+svg.clock .lab { font-size: 10px; font-weight: 700; fill: var(--ink-3); text-transform: uppercase; }
+svg.clock .path { stroke: var(--accuracy); stroke-width: 3; stroke-linecap: round; }
+svg.clock .path-head { fill: var(--accuracy); }
+svg.clock .face { stroke: var(--speed); stroke-width: 5; stroke-linecap: round; }
+svg.clock .ball { fill: #fff; stroke: var(--ink-3); }
+.clock-read { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.clock-read .k { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-3); }
+.clock-read b { font-family: var(--display); font-size: 22px; font-variant-numeric: tabular-nums; }
+.clock-read .s { display: block; font-size: 12px; color: var(--ink-2); }

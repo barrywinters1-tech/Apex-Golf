@@ -24,6 +24,9 @@
         "bs": 147.8,
         "chs": 113.5,
         "height": 84,
+        "launch": 9.3,
+        "spin": 3515,
+        "descent": 41.7,
         "curve": 19.2
       },
       {
@@ -33,6 +36,9 @@
         "bs": 153.3,
         "chs": 113.2,
         "height": 117.1,
+        "launch": 11.1,
+        "spin": 3664,
+        "descent": 46.2,
         "curve": -6.2
       },
       {
@@ -42,6 +48,9 @@
         "bs": 157.7,
         "chs": 113.2,
         "height": 116,
+        "launch": 14,
+        "spin": 2138,
+        "descent": 43.7,
         "curve": -7.7
       },
       {
@@ -51,6 +60,9 @@
         "bs": 162.2,
         "chs": 114.6,
         "height": 129.4,
+        "launch": 12.8,
+        "spin": 2408,
+        "descent": 47.1,
         "curve": -24.2
       },
       {
@@ -60,6 +72,9 @@
         "bs": 157.9,
         "chs": 115.9,
         "height": 131.6,
+        "launch": 12.1,
+        "spin": 4024,
+        "descent": 49.5,
         "curve": 2.7
       },
       {
@@ -69,6 +84,9 @@
         "bs": 152.8,
         "chs": 113.8,
         "height": 91.9,
+        "launch": 10.9,
+        "spin": 3527,
+        "descent": 41,
         "curve": -30.8
       }
     ],
@@ -104,6 +122,9 @@
         "bs": 120.1,
         "chs": 95,
         "height": 104.9,
+        "launch": 21,
+        "spin": 9062,
+        "descent": 54.4,
         "curve": 1.9
       },
       {
@@ -113,6 +134,9 @@
         "bs": 115.4,
         "chs": 95.8,
         "height": 97.6,
+        "launch": 20,
+        "spin": 7581,
+        "descent": 51.6,
         "curve": 8
       },
       {
@@ -122,6 +146,9 @@
         "bs": 109.4,
         "chs": 93.6,
         "height": 76.2,
+        "launch": 17.3,
+        "spin": 7178,
+        "descent": 45.6,
         "curve": 4.9
       },
       {
@@ -131,6 +158,9 @@
         "bs": 116.5,
         "chs": 96,
         "height": 97.3,
+        "launch": 19.5,
+        "spin": 9366,
+        "descent": 52,
         "curve": 7.1
       },
       {
@@ -140,6 +170,9 @@
         "bs": 111.7,
         "chs": 94.9,
         "height": 91.2,
+        "launch": 21.3,
+        "spin": 9695,
+        "descent": 52.7,
         "curve": 3.7
       },
       {
@@ -149,6 +182,9 @@
         "bs": 105.6,
         "chs": 94.1,
         "height": 81.9,
+        "launch": 21,
+        "spin": 9906,
+        "descent": 49.6,
         "curve": 7.1
       },
       {
@@ -158,6 +194,9 @@
         "bs": 117.8,
         "chs": 95.6,
         "height": 108.3,
+        "launch": 21.5,
+        "spin": 9096,
+        "descent": 53.8,
         "curve": -10.2
       },
       {
@@ -167,6 +206,9 @@
         "bs": 113.7,
         "chs": 92.8,
         "height": 93.4,
+        "launch": 17.7,
+        "spin": 7062,
+        "descent": 50.6,
         "curve": 5.8
       }
     ],
@@ -202,6 +244,9 @@
         "bs": 154.9,
         "chs": 113.7,
         "height": 103.2,
+        "launch": 10.5,
+        "spin": 3943,
+        "descent": 44.4,
         "curve": 10.9
       },
       {
@@ -211,6 +256,9 @@
         "bs": 149.7,
         "chs": 116.5,
         "height": 117.7,
+        "launch": 11.8,
+        "spin": 4319,
+        "descent": 47.8,
         "curve": 11.8
       },
       {
@@ -220,6 +268,9 @@
         "bs": 154.5,
         "chs": 117.2,
         "height": 137.5,
+        "launch": 12.2,
+        "spin": 4732,
+        "descent": 52.7,
         "curve": 11.2
       },
       {
@@ -229,6 +280,9 @@
         "bs": 151.7,
         "chs": 107.4,
         "height": 132.8,
+        "launch": 14.5,
+        "spin": 2473,
+        "descent": 47.8,
         "curve": 21.9
       },
       {
@@ -238,6 +292,9 @@
         "bs": 151.8,
         "chs": 108.8,
         "height": 123.1,
+        "launch": 12.9,
+        "spin": 3125,
+        "descent": 48.2,
         "curve": 14.4
       },
       {
@@ -247,6 +304,9 @@
         "bs": 155.5,
         "chs": 108.9,
         "height": 118,
+        "launch": 14,
+        "spin": 2781,
+        "descent": 45,
         "curve": 24.1
       },
       {
@@ -256,6 +316,9 @@
         "bs": 155,
         "chs": 108.2,
         "height": 122.1,
+        "launch": 14,
+        "spin": 2413,
+        "descent": 46.8,
         "curve": -8.4
       },
       {
@@ -265,6 +328,9 @@
         "bs": 153.8,
         "chs": 114.9,
         "height": 123.9,
+        "launch": 11.3,
+        "spin": 4011,
+        "descent": 49.2,
         "curve": -9.2
       },
       {
@@ -274,6 +340,9 @@
         "bs": 146.5,
         "chs": 116.5,
         "height": 115.1,
+        "launch": 11.9,
+        "spin": 4568,
+        "descent": 47.8,
         "curve": 28.7
       },
       {
@@ -283,6 +352,9 @@
         "bs": 152.4,
         "chs": 110.7,
         "height": 102.2,
+        "launch": 11,
+        "spin": 5180,
+        "descent": 46.4,
         "curve": -50.4
       },
       {
@@ -292,6 +364,9 @@
         "bs": 147.5,
         "chs": 113.9,
         "height": 125.9,
+        "launch": 13.1,
+        "spin": 4848,
+        "descent": 51.5,
         "curve": 18.9
       },
       {
@@ -301,6 +376,9 @@
         "bs": 143.3,
         "chs": 114.2,
         "height": 86.2,
+        "launch": 9.8,
+        "spin": 3927,
+        "descent": 41.7,
         "curve": 3.4
       },
       {
@@ -310,6 +388,9 @@
         "bs": 150.3,
         "chs": 106.8,
         "height": 93.1,
+        "launch": 9.5,
+        "spin": 3480,
+        "descent": 43,
         "curve": 42
       },
       {
@@ -319,6 +400,9 @@
         "bs": 151.4,
         "chs": 106.3,
         "height": 99.4,
+        "launch": 10.3,
+        "spin": 2747,
+        "descent": 42.7,
         "curve": 16.2
       },
       {
@@ -328,6 +412,9 @@
         "bs": 145.1,
         "chs": 105.8,
         "height": 92.3,
+        "launch": 10.9,
+        "spin": 2075,
+        "descent": 39.5,
         "curve": 23.5
       },
       {
@@ -337,6 +424,9 @@
         "bs": 149.3,
         "chs": 105.3,
         "height": 55.9,
+        "launch": 5.2,
+        "spin": 2281,
+        "descent": 31.1,
         "curve": 9.7
       },
       {
@@ -346,6 +436,9 @@
         "bs": 151.2,
         "chs": 107.3,
         "height": 113.2,
+        "launch": 11.3,
+        "spin": 2520,
+        "descent": 46.3,
         "curve": -24.4
       },
       {
@@ -355,6 +448,9 @@
         "bs": 135,
         "chs": 107,
         "height": 77.4,
+        "launch": 8.5,
+        "spin": 4442,
+        "descent": 42.4,
         "curve": 10.4
       },
       {
@@ -364,6 +460,9 @@
         "bs": 137.4,
         "chs": 104.6,
         "height": 79.1,
+        "launch": 9.8,
+        "spin": 3736,
+        "descent": 40.1,
         "curve": 2
       },
       {
@@ -373,6 +472,9 @@
         "bs": 140.8,
         "chs": 104.1,
         "height": 107.3,
+        "launch": 12.2,
+        "spin": 4144,
+        "descent": 46.1,
         "curve": 12.8
       },
       {
@@ -382,6 +484,9 @@
         "bs": 143.1,
         "chs": 105.2,
         "height": 107.4,
+        "launch": 11.4,
+        "spin": 3874,
+        "descent": 45.2,
         "curve": -3.7
       }
     ],
@@ -417,6 +522,9 @@
         "bs": 113.4,
         "chs": 92.6,
         "height": 72.1,
+        "launch": 14.4,
+        "spin": 7553,
+        "descent": 42.7,
         "curve": 4.7
       },
       {
@@ -426,6 +534,9 @@
         "bs": 115.1,
         "chs": 92.8,
         "height": 87.9,
+        "launch": 16.3,
+        "spin": 7959,
+        "descent": 47,
         "curve": -2.7
       },
       {
@@ -435,6 +546,9 @@
         "bs": 116.1,
         "chs": 93,
         "height": 88.7,
+        "launch": 16.7,
+        "spin": 7939,
+        "descent": 46.9,
         "curve": 2.1
       },
       {
@@ -444,6 +558,9 @@
         "bs": 114.9,
         "chs": 94.3,
         "height": 76,
+        "launch": 14.8,
+        "spin": 8300,
+        "descent": 42.8,
         "curve": 9.9
       },
       {
@@ -453,6 +570,9 @@
         "bs": 111.3,
         "chs": 95.7,
         "height": 85.8,
+        "launch": 18.2,
+        "spin": 8055,
+        "descent": 47,
         "curve": 7
       },
       {
@@ -462,6 +582,9 @@
         "bs": 112.8,
         "chs": 92.3,
         "height": 87.7,
+        "launch": 18.2,
+        "spin": 8792,
+        "descent": 47.8,
         "curve": 2.3
       },
       {
@@ -471,6 +594,9 @@
         "bs": 116,
         "chs": 93.6,
         "height": 83.5,
+        "launch": 15.4,
+        "spin": 7957,
+        "descent": 45,
         "curve": -0.4
       },
       {
@@ -480,6 +606,9 @@
         "bs": 115.8,
         "chs": 94,
         "height": 89.5,
+        "launch": 17,
+        "spin": 7870,
+        "descent": 47.3,
         "curve": 1.1
       },
       {
@@ -489,6 +618,9 @@
         "bs": 108.8,
         "chs": 94,
         "height": 72.2,
+        "launch": 16.3,
+        "spin": 7301,
+        "descent": 44.2,
         "curve": 5.6
       },
       {
@@ -498,6 +630,9 @@
         "bs": 107.3,
         "chs": 92.7,
         "height": 78.5,
+        "launch": 18.3,
+        "spin": 7999,
+        "descent": 47.2,
         "curve": 8.3
       },
       {
@@ -507,6 +642,9 @@
         "bs": 118.6,
         "chs": 93.9,
         "height": 73,
+        "launch": 13.3,
+        "spin": 8007,
+        "descent": 42.4,
         "curve": -2.1
       }
     ],
@@ -542,6 +680,9 @@
         "bs": 104.6,
         "chs": 90.2,
         "height": 81,
+        "launch": 19.7,
+        "spin": 9068,
+        "descent": 48.9,
         "curve": 3
       },
       {
@@ -551,6 +692,9 @@
         "bs": 108.5,
         "chs": 88.9,
         "height": 89.7,
+        "launch": 20.3,
+        "spin": 10125,
+        "descent": 48.9,
         "curve": 9.6
       },
       {
@@ -560,6 +704,9 @@
         "bs": 105.9,
         "chs": 91,
         "height": 73.3,
+        "launch": 17.4,
+        "spin": 8291,
+        "descent": 42.3,
         "curve": 6
       },
       {
@@ -569,6 +716,9 @@
         "bs": 102.9,
         "chs": 89.3,
         "height": 91.8,
+        "launch": 22.6,
+        "spin": 8508,
+        "descent": 49.8,
         "curve": 3
       },
       {
@@ -578,6 +728,9 @@
         "bs": 106.4,
         "chs": 88.8,
         "height": 89.6,
+        "launch": 20.8,
+        "spin": 9082,
+        "descent": 49.4,
         "curve": 4.8
       },
       {
@@ -587,6 +740,9 @@
         "bs": 109.1,
         "chs": 90.4,
         "height": 89.9,
+        "launch": 20,
+        "spin": 9221,
+        "descent": 48.2,
         "curve": -2.5
       },
       {
@@ -596,6 +752,9 @@
         "bs": 104.3,
         "chs": 89.4,
         "height": 85.1,
+        "launch": 20.4,
+        "spin": 9328,
+        "descent": 51.3,
         "curve": 1.9
       },
       {
@@ -605,6 +764,9 @@
         "bs": 108.2,
         "chs": 91.6,
         "height": 91,
+        "launch": 20.9,
+        "spin": 9365,
+        "descent": 49.7,
         "curve": 2.9
       }
     ],
@@ -640,6 +802,9 @@
         "bs": 148.4,
         "chs": 110.2,
         "height": 124.6,
+        "launch": 12.2,
+        "spin": 4357,
+        "descent": 47,
         "curve": 3.5
       },
       {
@@ -649,6 +814,9 @@
         "bs": 154.6,
         "chs": 111.2,
         "height": 134.5,
+        "launch": 11.3,
+        "spin": 4253,
+        "descent": 47.9,
         "curve": -9.4
       },
       {
@@ -658,6 +826,9 @@
         "bs": 153,
         "chs": 111.4,
         "height": 146.8,
+        "launch": 13,
+        "spin": 5296,
+        "descent": 50.6,
         "curve": 40.2
       },
       {
@@ -667,6 +838,9 @@
         "bs": 150.6,
         "chs": 103,
         "height": 101.1,
+        "launch": 11.7,
+        "spin": 2955,
+        "descent": 39.8,
         "curve": -25.4
       },
       {
@@ -676,6 +850,9 @@
         "bs": 146.7,
         "chs": 100.3,
         "height": 77.1,
+        "launch": 11.8,
+        "spin": 2104,
+        "descent": 31.9,
         "curve": -33.4
       },
       {
@@ -685,6 +862,9 @@
         "bs": 158.3,
         "chs": 112.2,
         "height": 160.8,
+        "launch": 12.6,
+        "spin": 4203,
+        "descent": 51.3,
         "curve": -6.6
       },
       {
@@ -694,6 +874,9 @@
         "bs": 146.7,
         "chs": 110.5,
         "height": 36.9,
+        "launch": 5,
+        "spin": 3020,
+        "descent": 20.4,
         "curve": 5.8
       },
       {
@@ -703,6 +886,9 @@
         "bs": 148.7,
         "chs": 112.5,
         "height": 137.3,
+        "launch": 12.1,
+        "spin": 4778,
+        "descent": 51.3,
         "curve": 26.5
       },
       {
@@ -712,6 +898,9 @@
         "bs": 146.7,
         "chs": 102,
         "height": 120.8,
+        "launch": 10.7,
+        "spin": 5134,
+        "descent": 46,
         "curve": 20.3
       },
       {
@@ -721,6 +910,9 @@
         "bs": 149,
         "chs": 103.1,
         "height": 141.5,
+        "launch": 12.2,
+        "spin": 4897,
+        "descent": 49.7,
         "curve": -7.1
       },
       {
@@ -730,6 +922,9 @@
         "bs": 152.9,
         "chs": 110.6,
         "height": 137.6,
+        "launch": 12.6,
+        "spin": 4044,
+        "descent": 48.3,
         "curve": -3.2
       },
       {
@@ -739,6 +934,9 @@
         "bs": 91.6,
         "chs": 74.9,
         "height": 72.7,
+        "launch": 22.7,
+        "spin": 8144,
+        "descent": 44.9,
         "curve": 2
       }
     ],
@@ -774,6 +972,9 @@
         "bs": 90.6,
         "chs": 87.4,
         "height": 82.7,
+        "launch": 27.3,
+        "spin": 12252,
+        "descent": 53.7,
         "curve": 0.2
       },
       {
@@ -783,6 +984,9 @@
         "bs": 86.9,
         "chs": 82.7,
         "height": 79.1,
+        "launch": 28,
+        "spin": 11038,
+        "descent": 50.8,
         "curve": 1.9
       },
       {
@@ -792,6 +996,9 @@
         "bs": 83.5,
         "chs": 86.4,
         "height": 86.2,
+        "launch": 31.4,
+        "spin": 7860,
+        "descent": 51.4,
         "curve": 6.2
       },
       {
@@ -801,6 +1008,9 @@
         "bs": 93.7,
         "chs": 89.3,
         "height": 91.1,
+        "launch": 26.9,
+        "spin": 12257,
+        "descent": 50,
         "curve": -2.3
       },
       {
@@ -810,6 +1020,9 @@
         "bs": 85.4,
         "chs": 84.9,
         "height": 80.7,
+        "launch": 28.8,
+        "spin": 6190,
+        "descent": 51.6,
         "curve": 10
       },
       {
@@ -819,6 +1032,9 @@
         "bs": 83.1,
         "chs": 83.8,
         "height": 76.3,
+        "launch": 28.8,
+        "spin": 10729,
+        "descent": 48.9,
         "curve": 3.3
       },
       {
@@ -828,6 +1044,9 @@
         "bs": 79.6,
         "chs": 76.7,
         "height": 41.9,
+        "launch": 19.4,
+        "spin": 10235,
+        "descent": 38.4,
         "curve": 5.5
       },
       {
@@ -837,6 +1056,9 @@
         "bs": 88.8,
         "chs": 79.9,
         "height": 69.2,
+        "launch": 23.5,
+        "spin": 11008,
+        "descent": 44.6,
         "curve": -0.5
       }
     ],

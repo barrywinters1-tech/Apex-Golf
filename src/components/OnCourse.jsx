@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Rings from '../charts/Rings.jsx';
 import LineChart from '../charts/LineChart.jsx';
 import BarChart from '../charts/BarChart.jsx';
+import Waterfall from '../charts/Waterfall.jsx';
 import { rounds as repo } from '../db/repo.js';
 import { BENCHMARKS as B } from '../db/index.js';
 import { roundSummary, goalFor, fmt, sgn, shortDate } from '../lib/stats.js';
@@ -53,7 +54,7 @@ export default function OnCourse({ rounds, goals }) {
               <div><div className="k">Up & down</div><div className="v">{lr.upDown ?? '—'}<small>/{lr.upDownOf ?? '—'}</small></div></div>
               <div><div className="k">Penalties</div><div className="v">{lr.pen ?? '—'}</div></div>
             </div>
-            <BarChart items={sg} empty="No strokes-gained logged for this round." />
+            <Waterfall par={lr.par} score={lr.score} steps={sg.map(x => ({ label: x.label.replace('Off the tee', 'Tee').replace('Around green', 'Around'), v: x.v }))} />
             {worst && <div className="sc-note">Biggest leak: <b>{worst.label}</b> ({sgn(worst.v)}). That's where the next practice block goes.</div>}
           </> : <div className="empty">No rounds logged yet — add one.</div>}
         </div>

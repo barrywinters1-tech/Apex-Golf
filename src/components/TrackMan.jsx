@@ -5,6 +5,9 @@ import { sessions as repo } from '../db/repo.js';
 import { BENCHMARKS as B, clubRank } from '../db/index.js';
 import { latestByClub, goalFor, fmt, sgn, shortDate } from '../lib/stats.js';
 import { impactReport } from '../lib/knowledge.js';
+import FlightView from '../charts/FlightView.jsx';
+import LaunchWindow from '../charts/LaunchWindow.jsx';
+import ImpactClock from '../charts/ImpactClock.jsx';
 import { Field, num, formData } from './ui.jsx';
 import Sheet from './Sheet.jsx';
 
@@ -74,11 +77,26 @@ export default function TrackMan({ sessions, goals }) {
         </div>
       </div>
 
-      {row && <div className="grid grid-tiles" style={{ marginTop: 14 }}>
+      <div className="grid grid-hero" style={{ marginTop: 14 }}>
+        <div className="hero">
+          <div className="hero-head"><div className="title"><h3>Ball flight</h3>{dSess && <span className="muted small">{activeClub} · {dSess.shots} shots</span>}</div></div>
+          <FlightView shots={dSess?.shotList || []} benchmarks={isDriver ? [{ label: 'D1 270', v: B.carry.d1 }, { label: 'Tour 282', v: B.carry.tour, cls: 'gold' }] : []} />
+          <div className="legend"><span>Each shot</span><span className="best">Longest</span></div>
+        </div>
+        <div className="card">
+          <h3>Launch window</h3><div className="sub">Ball speed × launch angle. Dots inside the shaded window turn speed into carry; dots below it leak it.</div>
+          <LaunchWindow shots={dSess?.shotList || []} club={activeClub} />
+        </div>
+      </div>
+
+      {row && <div className="grid grid-hero" style={{ marginTop: 14 }}>
+        <div className="card"><h3>At impact</h3><div className="sub">How the club arrived, drawn the way the coach draws it</div><ImpactClock path={row.path ?? 0} ftp={row.ftp ?? 0} aoa={row.aoa ?? 0} /></div>
+        <div className="grid grid-tiles" style={{ alignContent: 'start' }}>
         <div className="tile speed"><div className="lbl">Club speed</div><div className="val">{fmt(row.chs, 1)}<small>mph</small></div>{isDriver && <div className="bench">D1 ~{B.chs.d1} · Tour ~{B.chs.tour}</div>}</div>
         <div className="tile strike"><div className="lbl">Smash factor</div><div className="val">{fmt(row.smash, 2)}</div><div className="bench">{isDriver ? 'Ideal ~1.48' : 'Ball speed ÷ club speed'}</div></div>
         <div className="tile"><div className="lbl">Launch · spin</div><div className="val">{fmt(row.launch, 1)}°<small>{fmt(row.spin)} rpm</small></div>{isDriver && <div className="bench">Driver window ~2,000–3,000 rpm</div>}</div>
-        <div className="tile accuracy"><div className="lbl">Path · face-to-path</div><div className="val">{sgn(row.path)}°<small>{sgn(row.ftp)}°</small></div><div className="bench">AoA {sgn(row.aoa)}° · right/open = +</div></div>
+        <div className="tile accuracy"><div className="lbl">Ball speed</div><div className="val">{fmt(row.bs, 1)}<small>mph</small></div>{isDriver && <div className="bench">D1 ~{B.bs.d1} · Tour ~{B.bs.tour}</div>}</div>
+        </div>
       </div>}
 
       <div className="grid grid-2" style={{ marginTop: 14 }}>
