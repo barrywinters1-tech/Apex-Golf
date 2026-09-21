@@ -46,11 +46,11 @@ export default function App() {
         {incoming && <div className="banner"><p><b>Shared roadmap for {incoming.player?.name || 'a player'}</b> · {incoming.sessions?.length ?? 0} sessions, {incoming.rounds?.length ?? 0} rounds, {incoming.lessons?.length ?? 0} lessons. Load it here? This replaces the data on this device.</p><button className="btn primary" onClick={async () => { await importAll(incoming); setIncoming(null); history.replaceState(null, '', location.pathname); setTab('overview'); }}>Load</button><button className="btn" onClick={() => { setIncoming(null); history.replaceState(null, '', location.pathname); }}>Not now</button></div>}
         {!ready ? null :
           tab === 'overview' ? <Overview player={player} sessions={sessions} rounds={rounds} goals={goals} lessons={lessons} /> :
-          tab === 'blueprint' ? <Blueprint player={player} bp={bp} goals={goals} /> :
+          tab === 'blueprint' ? <Blueprint player={player} bp={bp} goals={goals} sessions={sessions} rounds={rounds} /> :
           tab === 'trackman' ? <TrackMan sessions={sessions} goals={goals} /> :
           tab === 'course' ? <OnCourse rounds={rounds} goals={goals} /> :
           tab === 'lessons' ? <Lessons lessons={lessons} bp={bp} goals={goals} /> :
-          <Data examples={examples} />}
+          <Data examples={examples} counts={{ sessions: sessions.length, rounds: rounds.length, lessons: lessons.length }} />}
       </main>
       <TabBar tab={tab} onChange={setTab} />
     </div>
