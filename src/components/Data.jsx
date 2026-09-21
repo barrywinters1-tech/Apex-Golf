@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { aggregateTrackman, parseCSV, normDate, dateFromFilename } from '../lib/trackman.js';
 import { sessions, rounds, exportAll, importAll, clearExamples } from '../db/repo.js';
 import { Field, num } from './ui.jsx';
+import { encodeShare } from '../lib/share.js';
 
 const findCol = (H, ...pats) => { for (const p of pats) { const i = H.findIndex(h => p.test(h)); if (i >= 0) return i; } return -1; };
 
@@ -22,6 +23,8 @@ export default function Data({ examples }) {
   const [status, setStatus] = useState('');
   const [json, setJson] = useState('');
   const [jstatus, setJstatus] = useState('');
+  const [share, setShare] = useState('');
+  const [sstatus, setSstatus] = useState('');
 
   const onFiles = async e => {
     const files = [...e.target.files]; if (!files.length) return;
@@ -51,6 +54,17 @@ export default function Data({ examples }) {
       {examples && <div className="banner"><p><b>Example rows are still in.</b> Rounds, lessons and some goals marked <i>example</i> are placeholders. TrackMan sessions are real.</p><button className="btn" onClick={clearExamples}>Clear examples</button></div>}
 
       <div className="grid grid-2">
+        <div className="card">
+          <h3>Share with your coach</h3><div className="sub">Everything on this device, packed into one link. Whoever opens it gets a copy on their device — no account, no server. Re-send after each update.</div>
+          <div className="fields">
+            <div className="wide" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+              <button className="btn primary" onClick={async () => { const u = await encodeShare(await exportAll()); setShare(u); try { await navigator.clipboard.writeText(u); setSstatus(`Link copied · ${(u.length / 1024).toFixed(1)} KB`); } catch { setSstatus('Copy the link below.'); } }}>Create share link</button>
+              {share && navigator.share && <button className="btn" onClick={() => navigator.share({ title: 'Apex Golf — my roadmap', url: share }).catch(() => {})}>Send…</button>}
+              <span className="status">{sstatus}</span>
+            </div>
+            {share && <input className="wide" readOnly value={share} onFocus={e => e.target.select()} style={{ fontFamily: 'ui-monospace, Menlo, monospace', fontSize: 12, border: '1px solid var(--sep-strong)', borderRadius: 10, padding: 8, background: 'var(--bg-elev)' }} aria-label="Share link" />}
+          </div>
+        </div>
         <div className="card">
           <h3>Import</h3><div className="sub">TrackMan Range app export works as-is: shots are averaged per club, Avg/Dev rows skipped. The export has no date, so it comes from the file name (16-jul-2026_… or 2026-07-16.csv) or the date below.</div>
           <div className="fields">

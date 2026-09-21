@@ -19,6 +19,9 @@ Player-development platform prototype: coach blueprint + goals, TrackMan session
 - `npm run import -- --notes "..."` — regenerate `data/seed/sessions.json` from `data/trackman/*.csv` (file name gives the date).
 - `npm run ai` — local summariser on :8787 (needs `ANTHROPIC_API_KEY`); set `VITE_AI_ENDPOINT=/api/summarise` in `.env.local`.
 
+## Sharing model (current)
+No backend. `src/lib/share.js` encodes `exportAll()` into a `#share=` URL; `App.jsx` offers to import it on load. Replace with Supabase sync when multi-user is needed; keep the share link as an offline fallback.
+
 ## Known gaps / next
 - Real rounds data (UpGame/Arccos export) — rounds importer is header-matched, untested on a real file.
 - Multi-player + auth (Supabase). Coach roster view.

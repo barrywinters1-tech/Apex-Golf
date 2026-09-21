@@ -20,5 +20,11 @@ echo 'VITE_AI_ENDPOINT=/api/summarise' > .env.local
 ```
 The "Generate summary & drills" button appears in the New Lesson sheet.
 
+## Sharing with a coach (no backend)
+**Data → Share with your coach** packs everything into one link (gzip, base64 in the URL hash — ~3 KB). Whoever opens it is offered a copy on their device. Re-send after each update. The link is the data: treat it as private.
+
+## Deploy
+Pushing to `main` builds, tests and publishes to GitHub Pages (`.github/workflows/deploy.yml`). Enable Pages → Source: GitHub Actions once in the repo settings. The app is installable to an iPhone home screen (manifest included).
+
 ## Layout
 - `src/db/` schema, repo, seed · `src/lib/` TrackMan parser, stats, AI client · `src/components/` views + Sheet/Nav · `src/charts/` SVG charts · `server/` summariser · `scripts/` CLI import · `tests/`
