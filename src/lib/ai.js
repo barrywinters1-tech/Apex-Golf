@@ -3,6 +3,8 @@
  * posts to a small server endpoint you control (see server/ in README).
  * Set VITE_AI_ENDPOINT=/api/summarise (or a full URL) in .env.local.
  */
+import { KNOWLEDGE_SUMMARY } from './knowledge.js';
+
 export const aiConfigured = () => Boolean(import.meta.env.VITE_AI_ENDPOINT);
 
 export async function summariseLesson({ raw, blueprint, goals }) {
@@ -11,13 +13,13 @@ export async function summariseLesson({ raw, blueprint, goals }) {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ raw, blueprint, goals }),
+    body: JSON.stringify({ raw, blueprint, goals, frame: KNOWLEDGE_SUMMARY }),
   });
   if (!res.ok) throw new Error(`Summariser returned ${res.status}`);
   return res.json(); // { summary, drills: [], priorities: [], focus }
 }
 
-export const SUMMARISE_PROMPT = ({ raw, blueprint, goals }) => `You are assisting a golf coach. Turn these raw lesson notes or transcript into structured output for the player's development log.
+export const SUMMARISE_PROMPT = ({ raw, blueprint, goals }) => `${KNOWLEDGE_SUMMARY}\n\nYou are assisting a golf coach. Turn these raw lesson notes or transcript into structured output for the player's development log.
 Player blueprint: ${JSON.stringify(blueprint)}
 Current goals: ${JSON.stringify((goals || []).map(g => `${g.metric}: ${g.current} -> ${g.target}`))}
 

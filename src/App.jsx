@@ -36,7 +36,7 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="topbar-inner">
-          <div className="brand"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="currentColor" strokeWidth="1.5"/><path d="M5 18c3-1 5-5 8-8s5-4 8-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="6" cy="18" r="2" fill="currentColor"/></svg>Apex Golf</div>
+          <div className="brand"><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="var(--speed)" strokeWidth="3"/><circle cx="14" cy="14" r="7" fill="none" stroke="var(--strike)" strokeWidth="3"/><circle cx="14" cy="14" r="3" fill="var(--accuracy)"/></svg>Apex Golf</div>
           <Segmented tab={tab} onChange={setTab} />
           <div className="spacer" />
           <div className="player-chip"><span className="avatar">{initials}</span><span className="hide-sm">{player?.name}</span></div>

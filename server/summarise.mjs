@@ -12,14 +12,14 @@ const KEY = process.env.ANTHROPIC_API_KEY;
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5';
 const PORT = process.env.PORT || 8787;
 
-const prompt = ({ raw, blueprint, goals }) => `You are assisting a golf coach. Turn these raw lesson notes or transcript into structured output for the player's development log.
+const prompt = ({ raw, blueprint, goals, frame = '' }) => `${frame}\n\nYou are assisting a golf coach. Turn these raw lesson notes or transcript into structured output for the player's development log.
 Player blueprint: ${JSON.stringify(blueprint)}
 Current goals: ${JSON.stringify((goals || []).map(g => `${g.metric}: ${g.current} -> ${g.target}`))}
 
 NOTES:
 ${raw}
 
-Return ONLY JSON: {"summary": "3-5 sentence plain-English summary in UK English", "drills": ["specific drill with reps/sets", ...max 5], "priorities": ["measurable priority until next lesson", ...max 3], "focus": "3-6 word lesson title"}`;
+Label each drill with its practice mode in brackets: [Technique], [Skill] or [Performance]. Return ONLY JSON: {"summary": "3-5 sentence plain-English summary in UK English", "drills": ["specific drill with reps/sets", ...max 5], "priorities": ["measurable priority until next lesson", ...max 3], "focus": "3-6 word lesson title"}`;
 
 http.createServer(async (req, res) => {
   res.setHeader('access-control-allow-origin', '*');

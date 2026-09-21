@@ -37,12 +37,12 @@ export default function Dispersion({ shots = [], club = 'Driver', benchmarks = [
   return (
     <svg ref={ref} className="disp" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${club} dispersion, ${shots.length} shots`}>
       <defs>
-        <radialGradient id="turf" cx="50%" cy="100%" r="90%"><stop offset="0" stopColor="var(--turf-hi)" /><stop offset="1" stopColor="var(--turf-lo)" /></radialGradient>
+        <radialGradient id="turf" cx="50%" cy="100%" r="90%"><stop offset="0" stopColor="var(--field-2)" /><stop offset="1" stopColor="var(--field)" /></radialGradient>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
       </defs>
       <rect x="0" y="0" width={W} height={H} rx="14" fill="url(#turf)" />
       {/* fairway band */}
-      <rect x={sx(-fairway)} y={12} width={sx(fairway) - sx(-fairway)} height={H - PAD - 12} fill="var(--fairway)" />
+      <rect x={sx(-fairway)} y={12} width={sx(fairway) - sx(-fairway)} height={H - PAD - 12} fill="rgba(48,209,88,0.10)" />
       <line x1={W / 2} x2={W / 2} y1={12} y2={H - PAD} className="centre" />
       {yTicks.map(y => <g key={y}><line x1={PAD} x2={W - PAD} y1={sy(y)} y2={sy(y)} className="yard" /><text x={PAD - 6} y={sy(y) + 4} textAnchor="end" className="tick">{y}</text></g>)}
       {xTicks.filter(x => x !== 0).map(x => <text key={x} x={sx(x)} y={H - PAD + 16} textAnchor="middle" className="tick">{x > 0 ? `${x}R` : `${-x}L`}</text>)}

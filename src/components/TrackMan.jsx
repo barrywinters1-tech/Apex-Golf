@@ -6,6 +6,7 @@ import { BENCHMARKS as B, clubRank } from '../db/index.js';
 import { latestByClub, goalFor, fmt, sgn, shortDate } from '../lib/stats.js';
 import { Field, num, formData } from './ui.jsx';
 import Sheet from './Sheet.jsx';
+import { impactReport } from '../lib/knowledge.js';
 
 const METRICS = [['chs', 'Club speed', 1], ['bs', 'Ball speed', 1], ['smash', 'Smash factor', 2], ['carry', 'Carry', 0], ['total', 'Total', 0], ['spin', 'Spin', 0], ['launch', 'Launch angle', 1], ['side', 'Side dispersion', 0], ['aoa', 'Attack angle', 1], ['path', 'Club path', 1], ['ftp', 'Face to path', 1]];
 const CLUBS = ['Driver', '3 Wood', '5 Wood', 'Hybrid', '4 Iron', '5 Iron', '6 Iron', '7 Iron', '8 Iron', '9 Iron', 'PW', 'Gap Wedge', 'SW', 'LW'];
@@ -25,6 +26,7 @@ export default function TrackMan({ sessions, goals }) {
   const [dIdx, setDIdx] = useState(-1);
   const dSess = clubSessions.at(dIdx) || clubSessions.at(-1);
   const ds = dSess ? dispersionStats(dSess.shotList) : null;
+  const report = impactReport(dSess || latest.find(x => x.club === activeClub), { premiumBall: !/low-compression|range ball/i.test((dSess || {}).notes || '') });
 
   return (
     <div className="fade-in">
@@ -62,7 +64,17 @@ export default function TrackMan({ sessions, goals }) {
         </div>}
       </div>
 
-      <div className="card" style={{ marginTop: 18 }}>
+      <div className="group" style={{ marginTop: 16 }}>
+        <div className="group-title"><h3>Impact report</h3><span className="hint">what the numbers say at the ball</span></div>
+        {report.length ? report.map(r => (
+          <div className="row" key={r.law}>
+            <div className={`dot l${r.level}`} aria-hidden="true" />
+            <div className="grow"><div className="label">{r.law} <span className="muted small">· {r.metric}</span></div><div className="sub">{r.verdict.charAt(0).toUpperCase() + r.verdict.slice(1)}. {r.note}</div></div>
+          </div>
+        )) : <div className="empty">Pick a club with TrackMan data.</div>}
+      </div>
+
+      <div className="card" style={{ marginTop: 16 }}>
         <div className="page-head" style={{ marginBottom: 6 }}>
           <div><h3>{activeClub} · {mLabel}</h3><div className="sub">{pts.length} session{pts.length === 1 ? '' : 's'}</div></div>
           <div style={{ display: 'flex', gap: 8 }}>
