@@ -8,6 +8,9 @@ Player-development platform prototype: coach blueprint + goals, TrackMan session
 - `motion` for springs (sheet, segmented control). Follow Apple fluid-interface rules: interruptible, velocity handoff, no CSS transitions on gesture-driven things.
 - `src/lib/trackman.js` is shared by the browser importer and `scripts/import-trackman.mjs`. It is the one place TrackMan CSV semantics live; tests in `tests/`.
 
+## Blueprint model
+The coach's blueprint is his own Excel format: rows (Practice station, Set-up checks, Movement checks, Drills, Miss & why, Added notes) × columns (Backswing/Setup, Downswing/Delivery, Follow-through/Notes), one grid per area (Swing, Short game, Putting), plus a Mental toughness page (Old story / Ideal performance state / Scorecard). `src/lib/blueprint.js` defines it; `parseBlueprintGrid` ingests a grid copied from Excel. Never rename the rows to "nicer" labels without checking with the coach — familiarity beats tidiness.
+
 ## Conventions
 - Signed launch-monitor values: right / open = positive, left / closed = negative. TrackMan writes "6.2 R" / "3.5 L".
 - Every record carries `playerId`. Example placeholder rows carry `source: 'example'`.

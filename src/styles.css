@@ -213,6 +213,21 @@ svg.chart .lab { fill: var(--ink); font-weight: 600; }
 .sheet-head h2 { font-size: 20px; }
 .sheet-body { padding: 8px 18px calc(18px + var(--safe-b)); overflow-y: auto; max-height: calc(100vh - 140px); touch-action: pan-y; display: grid; gap: 14px; }
 
+/* blueprint matrix */
+.bp { display: grid; gap: 12px; }
+.bp-head { display: grid; grid-template-columns: 180px repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 4px; }
+.bp-row { display: grid; grid-template-columns: 180px repeat(3, minmax(0, 1fr)); gap: 12px; background: var(--bg-group); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 12px; }
+.bp-rowhead .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+.bp-cell { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bp-cell-label { display: none; }
+.bp-cell textarea { width: 100%; min-height: 96px; border: 1px solid transparent; background: var(--bg); border-radius: 10px; padding: 9px 10px; font-size: 14px; line-height: 1.4; resize: vertical; }
+.bp-cell textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); background: var(--bg-elev); }
+@media (max-width: 900px) {
+  .bp-head { display: none; }
+  .bp-row { grid-template-columns: 1fr; }
+  .bp-cell-label { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+}
+
 /* lesson */
 .lesson { padding: 14px 16px; border-top: 1px solid var(--sep); }
 .lesson:first-child { border-top: 0; }

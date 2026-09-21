@@ -6,21 +6,24 @@
 import { db } from './index.js';
 import { PLAYER_ID } from './repo.js';
 import trackman from '../../data/seed/sessions.json';
+import { emptyBlueprint } from '../lib/blueprint.js';
 
 export async function seedIfEmpty() {
   const n = await db.players.count();
   if (n) return false;
   await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.meta, async () => {
     await db.players.put({ id: PLAYER_ID, name: 'Barry Winters', handicap: '', homeClub: '', coach: 'Jack', academy: '', ambition: 'Consistent single-figure golf; a measurable development roadmap with Jack' });
-    await db.blueprint.put({
-      playerId: PLAYER_ID,
-      swing: 'Example: neutral grip, shallower shaft in transition, hold face through impact. Priority — start line control with driver.',
-      shortgame: 'Example: lower-flight chip as default; landing-spot focus. Priority — up-and-down % from 10–30 yards.',
-      putting: 'Example: aim/read routine; speed control 20–40 ft. Priority — lag putting to inside 3 ft.',
-      physical: 'Example: thoracic rotation mobility, single-leg stability.',
-      mental: 'Example: pre-shot routine consistency; scoring plan per hole.',
-      course: 'Example: club off the tee by hazard, not by distance. Attack only from the fairway.',
+    const bp = emptyBlueprint(); // Swing area transcribed from the coach's "Barry Winters Blueprints" PDF; other areas blank
+    Object.assign(bp.areas.swing, {
+      station:  { setup: 'Double alignment stick in backswing — way for backswing and downswing depth', delivery: '', finish: '' },
+      setup:    { setup: 'Grip tends to get strong — grip trainer', delivery: '', finish: 'Driver: feet square to 1° closed but shoulders more right than feet\nKeep an eye on tilt — not too much' },
+      movement: { setup: 'Too much lift and too much sway in the backswing\nBum must stay on the butt line', delivery: 'Left shoulder needs to work more down\nHandle needs to work more in', finish: 'Club face down to the ground feel at P6' },
+      drills:   { setup: 'Padraig Harrington drill for chest down', delivery: '', finish: '90/90/90 drill with flying wedge follow-through' },
+      miss:     { setup: 'Thin strike — too much head lift in the backswing; handle works up and away in the takeaway', delivery: 'Slice pattern, starts left — tend to lift, plane gets too high at the top; club comes down steep and in front', finish: 'Push or push-slice — feet get too far right, shoulders open to the feet line (mismatch)\nOver-draw / pull-draw — club overtakes hands at P7, the flail' },
+      notes:    { setup: '', delivery: '', finish: '' },
     });
+    Object.assign(bp.mental.ideal, { process: 'The shot — inner caddy\nVisualisation\n1 shot at a time\nA shot\nStrict on process, tolerant on outcome\nBreathing rituals' });
+    await db.blueprint.put({ playerId: PLAYER_ID, ...bp });
     await db.goals.bulkAdd([
       { area: 'Driving',  metric: 'Driver club speed', unit: 'mph', baseline: 110, current: 110, target: 115, by: '2027-03-31' },
       { area: 'Driving',  metric: 'Driver smash factor (premium ball)', unit: '', baseline: 1.36, current: 1.36, target: 1.48, by: '2027-03-31' },

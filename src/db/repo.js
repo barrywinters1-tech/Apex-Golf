@@ -65,7 +65,5 @@ export async function clearExamples() {
   const r = await rounds.list(); await db.rounds.bulkDelete(r.filter(x => x.source === 'example').map(x => x.id));
   const l = await lessons.list(); await db.lessons.bulkDelete(l.filter(x => x.source === 'example').map(x => x.id));
   const g = await goals.list(); await db.goals.bulkDelete(g.filter(x => x.source === 'example').map(x => x.id));
-  const b = await blueprint.get();
-  if (b) { const nb = { playerId: PLAYER_ID }; for (const k of Object.keys(b)) nb[k] = /^Example:/.test(b[k] || '') ? '' : b[k]; await db.blueprint.put(nb); }
   await db.meta.put({ key: 'examples', value: false });
 }

@@ -12,7 +12,7 @@ export const Tile = ({ label, value, unit, delta, bench }) => (
 );
 
 export const Field = ({ id, label, children, className = '' }) => (
-  <div className={className}><label htmlFor={id}>{label}</label>{children}</div>
+  <div className={`field ${className}`}><label htmlFor={id}>{label}</label>{children}</div>
 );
 
 export const Empty = ({ children }) => <div className="empty">{children}</div>;

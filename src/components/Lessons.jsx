@@ -3,6 +3,7 @@ import { lessons as repo } from '../db/repo.js';
 import { aiConfigured, summariseLesson } from '../lib/ai.js';
 import { Field, lines } from './ui.jsx';
 import Sheet from './Sheet.jsx';
+import { matrixText } from '../lib/blueprint.js';
 
 export default function Lessons({ lessons, bp, goals }) {
   const [sheet, setSheet] = useState(false);
@@ -15,7 +16,7 @@ export default function Lessons({ lessons, bp, goals }) {
     if (!f.raw.trim()) { setStatus('Paste some notes first.'); return; }
     setBusy(true); setStatus('Thinking…');
     try {
-      const out = await summariseLesson({ raw: f.raw, blueprint: bp, goals });
+      const out = await summariseLesson({ raw: f.raw, blueprint: matrixText(bp), goals });
       setF(x => ({ ...x, notes: out.summary || x.notes, drills: (out.drills || []).join('\n'), priorities: (out.priorities || []).join('\n'), focus: x.focus || out.focus || '' }));
       setStatus('Done — edit anything before saving.');
     } catch (e) { setStatus('Could not generate a summary. Fill the fields in by hand.'); console.warn(e); }
