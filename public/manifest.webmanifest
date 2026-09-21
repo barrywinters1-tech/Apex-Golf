@@ -3,7 +3,7 @@
   "short_name": "Apex Golf",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f4f5f2",
-  "theme_color": "#1a6b3f",
+  "background_color": "#070c09",
+  "theme_color": "#070c09",
   "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

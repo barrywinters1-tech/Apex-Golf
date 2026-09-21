@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from './db/index.js';
 import { PLAYER_ID } from './db/repo.js';
-import { seedIfEmpty } from './db/seed.js';
+import { seedIfEmpty, upgradeSeed } from './db/seed.js';
 import { Segmented, TabBar } from './components/Nav.jsx';
 import Overview from './components/Overview.jsx';
 import Blueprint from './components/Blueprint.jsx';
@@ -20,7 +20,7 @@ export default function App() {
   const [tab, setTabState] = useState(initialTab);
   const [incoming, setIncoming] = useState(null);
   const setTab = t => { setTabState(t); try { localStorage.setItem('apex.tab', t); } catch {} };
-  useEffect(() => { seedIfEmpty().then(() => setReady(true)); decodeShare().then(d => d && setIncoming(d)).catch(() => {}); }, []);
+  useEffect(() => { seedIfEmpty().then(upgradeSeed).then(() => setReady(true)); decodeShare().then(d => d && setIncoming(d)).catch(() => {}); }, []);
 
   const player = useLiveQuery(() => db.players.get(PLAYER_ID), [], null);
   const bp = useLiveQuery(() => db.blueprint.get(PLAYER_ID), [], null);
@@ -36,7 +36,7 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="topbar-inner">
-          <div className="brand"><span className="brand-mark">A</span>Apex Golf</div>
+          <div className="brand"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="currentColor" strokeWidth="1.5"/><path d="M5 18c3-1 5-5 8-8s5-4 8-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="6" cy="18" r="2" fill="currentColor"/></svg>Apex Golf</div>
           <Segmented tab={tab} onChange={setTab} />
           <div className="spacer" />
           <div className="player-chip"><span className="avatar">{initials}</span><span className="hide-sm">{player?.name}</span></div>

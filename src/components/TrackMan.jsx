@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import LineChart from '../charts/LineChart.jsx';
+import Dispersion, { dispersionStats } from '../charts/Dispersion.jsx';
 import { sessions as repo } from '../db/repo.js';
 import { BENCHMARKS as B, clubRank } from '../db/index.js';
 import { latestByClub, goalFor, fmt, sgn, shortDate } from '../lib/stats.js';
@@ -20,6 +21,10 @@ export default function TrackMan({ sessions, goals }) {
   const pts = sessions.filter(s => s.club === activeClub && s[metric] != null).map(s => ({ x: shortDate(s.date), y: s[metric] }));
   const isDriver = /driver/i.test(activeClub || '');
   const gC = goalFor(goals, 'chs');
+  const clubSessions = sessions.filter(x => x.club === activeClub && x.shotList?.length);
+  const [dIdx, setDIdx] = useState(-1);
+  const dSess = clubSessions.at(dIdx) || clubSessions.at(-1);
+  const ds = dSess ? dispersionStats(dSess.shotList) : null;
 
   return (
     <div className="fade-in">
@@ -33,7 +38,7 @@ export default function TrackMan({ sessions, goals }) {
         <div className="tablewrap"><table>
           <thead><tr><th>Club</th><th>Date</th><th className="r">Shots</th><th className="r">Club</th><th className="r">Ball</th><th className="r">Smash</th><th className="r">Launch</th><th className="r">Spin</th><th className="r">Carry</th><th className="r">Total</th><th className="r">Side</th><th className="r">AoA</th><th className="r">Path</th><th className="r">Face–path</th></tr></thead>
           <tbody>{latest.map(s => (
-            <tr key={s.club} onClick={() => setClub(s.club)} style={{ cursor: 'pointer', background: s.club === activeClub ? 'var(--accent-soft)' : undefined }}>
+            <tr key={s.club} onClick={() => setClub(s.club)} data-active={s.club === activeClub} style={{ cursor: 'pointer' }}>
               <td><b>{s.club}</b></td><td className="muted">{s.date}</td><td className="r">{s.shots ?? '—'}</td>
               <td className="r">{fmt(s.chs, 1)}</td><td className="r">{fmt(s.bs, 1)}</td><td className="r">{fmt(s.smash, 2)}</td><td className="r">{fmt(s.launch, 1)}</td><td className="r">{fmt(s.spin)}</td><td className="r">{fmt(s.carry)}</td><td className="r">{fmt(s.total)}</td><td className="r">{fmt(s.side)}</td>
               <td className="r">{sgn(s.aoa)}</td><td className="r">{sgn(s.path)}</td><td className="r">{sgn(s.ftp)}</td>
@@ -41,6 +46,20 @@ export default function TrackMan({ sessions, goals }) {
           {!latest.length && <tr><td colSpan="14" className="empty">No sessions yet — add one or import a TrackMan CSV under Data.</td></tr>}
           </tbody>
         </table></div>
+      </div>
+
+      <div className="hero" style={{ marginTop: 18 }}>
+        <div className="hero-head">
+          <div className="title"><h3>{activeClub} dispersion</h3>{dSess && <span className="muted small">{dSess.date} · {dSess.shots} shots{dSess.notes ? ` · ${dSess.notes}` : ''}</span>}</div>
+          {clubSessions.length > 1 && <div className="chips">{clubSessions.map((x, i) => <button key={x.id ?? i} className="chip" aria-pressed={x === dSess} onClick={() => setDIdx(i - clubSessions.length)}>{shortDate(x.date)}</button>)}</div>}
+        </div>
+        <Dispersion shots={dSess?.shotList || []} club={activeClub} compact fairway={isDriver ? 15 : 10} benchmarks={isDriver ? [{ label: 'D1 carry', v: B.carry.d1 }] : /7 iron/i.test(activeClub) ? [{ label: 'D1 7i carry', v: B.iron7.d1 }] : []} />
+        {ds && <div className="hero-stats">
+          <div className="hstat"><div className="k">Avg carry</div><div className="v">{ds.carry.toFixed(0)}<small>yds</small></div></div>
+          <div className="hstat"><div className="k">Carry ±</div><div className="v">{ds.carrySd.toFixed(1)}<small>yds</small></div></div>
+          <div className="hstat"><div className="k">Side ±</div><div className="v">{ds.latSd.toFixed(1)}<small>yds</small></div></div>
+          <div className="hstat"><div className="k">Miss bias</div><div className="v txt">{ds.left > ds.right ? 'Left' : ds.right > ds.left ? 'Right' : 'Even'}<small>{Math.max(ds.left, ds.right)} of {ds.n}</small></div></div>
+        </div>}
       </div>
 
       <div className="card" style={{ marginTop: 18 }}>

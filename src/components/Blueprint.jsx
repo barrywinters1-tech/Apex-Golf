@@ -54,9 +54,8 @@ export default function Blueprint({ player, bp, goals }) {
 
       <div className="section" style={{ marginTop: 18 }}>
         <div className="page-head" style={{ marginBottom: 10 }}><div><h2>Coach's blueprint</h2><div className="sub">The coach's format: what to check, per phase. Cells save when you leave them.</div></div><button className="btn" onClick={() => setPaste(true)}>Paste from Excel</button></div>
-        <div className="segmented" style={{ display: 'inline-flex', marginBottom: 12 }} role="tablist">
-          {BP_AREAS.map(([a, al]) => <button key={a} role="tab" aria-selected={area === a} onClick={() => setArea(a)} style={area === a ? { background: 'var(--bg-elev)', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' } : undefined}>{al}</button>)}
-          <button role="tab" aria-selected={area === 'mental'} onClick={() => setArea('mental')} style={area === 'mental' ? { background: 'var(--bg-elev)', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' } : undefined}>Mental</button>
+        <div className="chips" style={{ marginBottom: 14 }} role="tablist">
+          {[...BP_AREAS, ['mental', 'Mental']].map(([a, al]) => <button key={a} role="tab" className="chip" aria-pressed={area === a} aria-selected={area === a} onClick={() => setArea(a)}>{al}</button>)}
         </div>
         {area !== 'mental' ? (
           <div className="bp" key={area}>

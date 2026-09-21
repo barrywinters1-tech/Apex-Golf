@@ -51,6 +51,7 @@ const COLS = {
   ftp:    [/^ftp/, /face ?to ?path/],
   height: [/^height/],
   descent:[/descent/],
+  curve:  [/curve/],
 };
 
 export function mapColumns(headerRow) {
@@ -109,6 +110,7 @@ export function aggregateTrackman(text, meta) {
       chs: m('chs'), bs: m('bs'), smash: m('smash'), launch: m('launch'), spin: m('spin'),
       carry: m('carry'), total: m('total'), side: m('side'),
       aoa: m('aoa'), path: m('path'), ftp: m('ftp'), height: m('height'), descent: m('descent'),
+      shotList: gr.rows.map(r => ({ carry: signed(g(r, c.carry)), total: signed(g(r, c.total)), lat: signed(g(r, c.side)), bs: signed(g(r, c.bs)), chs: signed(g(r, c.chs)), height: signed(g(r, c.height)), curve: c.curve >= 0 ? signed(g(r, c.curve)) : null })).filter(x => x.carry != null),
       carrySd: carries.length > 1 ? +sd(carries).toFixed(1) : null,
       lateralSd: laterals.length > 1 ? +sd(laterals).toFixed(1) : null,
       carryMax: carries.length ? Math.max(...carries) : null,

@@ -16,6 +16,62 @@
     "ftp": -1.1,
     "height": 112,
     "descent": 44.9,
+    "shotList": [
+      {
+        "carry": 228.6,
+        "total": 233.5,
+        "lat": 17.2,
+        "bs": 147.8,
+        "chs": 113.5,
+        "height": 84,
+        "curve": 19.2
+      },
+      {
+        "carry": 243.1,
+        "total": 247.1,
+        "lat": 0.9,
+        "bs": 153.3,
+        "chs": 113.2,
+        "height": 117.1,
+        "curve": -6.2
+      },
+      {
+        "carry": 260.6,
+        "total": 268.1,
+        "lat": -1.7,
+        "bs": 157.7,
+        "chs": 113.2,
+        "height": 116,
+        "curve": -7.7
+      },
+      {
+        "carry": 271.7,
+        "total": 277.5,
+        "lat": -7.1,
+        "bs": 162.2,
+        "chs": 114.6,
+        "height": 129.4,
+        "curve": -24.2
+      },
+      {
+        "carry": 249.6,
+        "total": 252.4,
+        "lat": 20.6,
+        "bs": 157.9,
+        "chs": 115.9,
+        "height": 131.6,
+        "curve": 2.7
+      },
+      {
+        "carry": 236.2,
+        "total": 242.1,
+        "lat": -26.7,
+        "bs": 152.8,
+        "chs": 113.8,
+        "height": 91.9,
+        "curve": -30.8
+      }
+    ],
     "carrySd": 14.5,
     "lateralSd": 15.7,
     "carryMax": 271.7,
@@ -40,6 +96,80 @@
     "ftp": 1.3,
     "height": 94,
     "descent": 51.3,
+    "shotList": [
+      {
+        "carry": 152.2,
+        "total": 151,
+        "lat": 12.1,
+        "bs": 120.1,
+        "chs": 95,
+        "height": 104.9,
+        "curve": 1.9
+      },
+      {
+        "carry": 148.9,
+        "total": 148.6,
+        "lat": 22.8,
+        "bs": 115.4,
+        "chs": 95.8,
+        "height": 97.6,
+        "curve": 8
+      },
+      {
+        "carry": 145.9,
+        "total": 146.4,
+        "lat": 17.3,
+        "bs": 109.4,
+        "chs": 93.6,
+        "height": 76.2,
+        "curve": 4.9
+      },
+      {
+        "carry": 149.4,
+        "total": 148.4,
+        "lat": 19.7,
+        "bs": 116.5,
+        "chs": 96,
+        "height": 97.3,
+        "curve": 7.1
+      },
+      {
+        "carry": 139.3,
+        "total": 138.2,
+        "lat": 16.6,
+        "bs": 111.7,
+        "chs": 94.9,
+        "height": 91.2,
+        "curve": 3.7
+      },
+      {
+        "carry": 135.5,
+        "total": 135.6,
+        "lat": 19.5,
+        "bs": 105.6,
+        "chs": 94.1,
+        "height": 81.9,
+        "curve": 7.1
+      },
+      {
+        "carry": 151.8,
+        "total": 150.7,
+        "lat": 3.6,
+        "bs": 117.8,
+        "chs": 95.6,
+        "height": 108.3,
+        "curve": -10.2
+      },
+      {
+        "carry": 151.7,
+        "total": 151.7,
+        "lat": 13.2,
+        "bs": 113.7,
+        "chs": 92.8,
+        "height": 93.4,
+        "curve": 5.8
+      }
+    ],
     "carrySd": 5.9,
     "lateralSd": 5.6,
     "carryMax": 152.2,
@@ -64,6 +194,197 @@
     "ftp": 0.4,
     "height": 106,
     "descent": 45,
+    "shotList": [
+      {
+        "carry": 240.1,
+        "total": 244,
+        "lat": 1.8,
+        "bs": 154.9,
+        "chs": 113.7,
+        "height": 103.2,
+        "curve": 10.9
+      },
+      {
+        "carry": 224.8,
+        "total": 227.6,
+        "lat": -3.2,
+        "bs": 149.7,
+        "chs": 116.5,
+        "height": 117.7,
+        "curve": 11.8
+      },
+      {
+        "carry": 220.9,
+        "total": 222.3,
+        "lat": 11.2,
+        "bs": 154.5,
+        "chs": 117.2,
+        "height": 137.5,
+        "curve": 11.2
+      },
+      {
+        "carry": 256.6,
+        "total": 262,
+        "lat": 26.9,
+        "bs": 151.7,
+        "chs": 107.4,
+        "height": 132.8,
+        "curve": 21.9
+      },
+      {
+        "carry": 245.2,
+        "total": 249.3,
+        "lat": 8.7,
+        "bs": 151.8,
+        "chs": 108.8,
+        "height": 123.1,
+        "curve": 14.4
+      },
+      {
+        "carry": 255.7,
+        "total": 261.5,
+        "lat": 24.2,
+        "bs": 155.5,
+        "chs": 108.9,
+        "height": 118,
+        "curve": 24.1
+      },
+      {
+        "carry": 255.5,
+        "total": 261.1,
+        "lat": -8.1,
+        "bs": 155,
+        "chs": 108.2,
+        "height": 122.1,
+        "curve": -8.4
+      },
+      {
+        "carry": 225.1,
+        "total": 228,
+        "lat": -19.8,
+        "bs": 153.8,
+        "chs": 114.9,
+        "height": 123.9,
+        "curve": -9.2
+      },
+      {
+        "carry": 215,
+        "total": 217.6,
+        "lat": 21.4,
+        "bs": 146.5,
+        "chs": 116.5,
+        "height": 115.1,
+        "curve": 28.7
+      },
+      {
+        "carry": 225.8,
+        "total": 228.4,
+        "lat": -65.8,
+        "bs": 152.4,
+        "chs": 110.7,
+        "height": 102.2,
+        "curve": -50.4
+      },
+      {
+        "carry": 215.2,
+        "total": 216.7,
+        "lat": 7.2,
+        "bs": 147.5,
+        "chs": 113.9,
+        "height": 125.9,
+        "curve": 18.9
+      },
+      {
+        "carry": 221,
+        "total": 225.3,
+        "lat": -2.5,
+        "bs": 143.3,
+        "chs": 114.2,
+        "height": 86.2,
+        "curve": 3.4
+      },
+      {
+        "carry": 227.2,
+        "total": 232.3,
+        "lat": 43.9,
+        "bs": 150.3,
+        "chs": 106.8,
+        "height": 93.1,
+        "curve": 42
+      },
+      {
+        "carry": 248.8,
+        "total": 255,
+        "lat": 25.6,
+        "bs": 151.4,
+        "chs": 106.3,
+        "height": 99.4,
+        "curve": 16.2
+      },
+      {
+        "carry": 247.4,
+        "total": 256.6,
+        "lat": 25.2,
+        "bs": 145.1,
+        "chs": 105.8,
+        "height": 92.3,
+        "curve": 23.5
+      },
+      {
+        "carry": 227.7,
+        "total": 239.7,
+        "lat": 8,
+        "bs": 149.3,
+        "chs": 105.3,
+        "height": 55.9,
+        "curve": 9.7
+      },
+      {
+        "carry": 233.4,
+        "total": 238.9,
+        "lat": -37.1,
+        "bs": 151.2,
+        "chs": 107.3,
+        "height": 113.2,
+        "curve": -24.4
+      },
+      {
+        "carry": 196.6,
+        "total": 199.8,
+        "lat": 4.5,
+        "bs": 135,
+        "chs": 107,
+        "height": 77.4,
+        "curve": 10.4
+      },
+      {
+        "carry": 212.9,
+        "total": 217.9,
+        "lat": -2.7,
+        "bs": 137.4,
+        "chs": 104.6,
+        "height": 79.1,
+        "curve": 2
+      },
+      {
+        "carry": 213.9,
+        "total": 217.2,
+        "lat": 19.2,
+        "bs": 140.8,
+        "chs": 104.1,
+        "height": 107.3,
+        "curve": 12.8
+      },
+      {
+        "carry": 220.6,
+        "total": 224.4,
+        "lat": -3.5,
+        "bs": 143.1,
+        "chs": 105.2,
+        "height": 107.4,
+        "curve": -3.7
+      }
+    ],
     "carrySd": 16.1,
     "lateralSd": 23.5,
     "carryMax": 256.6,
@@ -88,6 +409,107 @@
     "ftp": 1,
     "height": 81,
     "descent": 45.5,
+    "shotList": [
+      {
+        "carry": 153.6,
+        "total": 154.2,
+        "lat": 8.7,
+        "bs": 113.4,
+        "chs": 92.6,
+        "height": 72.1,
+        "curve": 4.7
+      },
+      {
+        "carry": 153.7,
+        "total": 153.8,
+        "lat": -1.3,
+        "bs": 115.1,
+        "chs": 92.8,
+        "height": 87.9,
+        "curve": -2.7
+      },
+      {
+        "carry": 154.7,
+        "total": 154.9,
+        "lat": 6.1,
+        "bs": 116.1,
+        "chs": 93,
+        "height": 88.7,
+        "curve": 2.1
+      },
+      {
+        "carry": 156.6,
+        "total": 157,
+        "lat": 11.2,
+        "bs": 114.9,
+        "chs": 94.3,
+        "height": 76,
+        "curve": 9.9
+      },
+      {
+        "carry": 146.3,
+        "total": 146.5,
+        "lat": 7,
+        "bs": 111.3,
+        "chs": 95.7,
+        "height": 85.8,
+        "curve": 7
+      },
+      {
+        "carry": 146.7,
+        "total": 146.4,
+        "lat": 0,
+        "bs": 112.8,
+        "chs": 92.3,
+        "height": 87.7,
+        "curve": 2.3
+      },
+      {
+        "carry": 157.7,
+        "total": 158.1,
+        "lat": -0.4,
+        "bs": 116,
+        "chs": 93.6,
+        "height": 83.5,
+        "curve": -0.4
+      },
+      {
+        "carry": 153.7,
+        "total": 153.9,
+        "lat": 4.9,
+        "bs": 115.8,
+        "chs": 94,
+        "height": 89.5,
+        "curve": 1.1
+      },
+      {
+        "carry": 140.6,
+        "total": 141.2,
+        "lat": 2,
+        "bs": 108.8,
+        "chs": 94,
+        "height": 72.2,
+        "curve": 5.6
+      },
+      {
+        "carry": 136.8,
+        "total": 136.8,
+        "lat": 8.6,
+        "bs": 107.3,
+        "chs": 92.7,
+        "height": 78.5,
+        "curve": 8.3
+      },
+      {
+        "carry": 154.8,
+        "total": 155.3,
+        "lat": -2,
+        "bs": 118.6,
+        "chs": 93.9,
+        "height": 73,
+        "curve": -2.1
+      }
+    ],
     "carrySd": 6.6,
     "lateralSd": 4.4,
     "carryMax": 157.7,
@@ -112,6 +534,80 @@
     "ftp": 1.6,
     "height": 86,
     "descent": 48.6,
+    "shotList": [
+      {
+        "carry": 131,
+        "total": 130.4,
+        "lat": 5.8,
+        "bs": 104.6,
+        "chs": 90.2,
+        "height": 81,
+        "curve": 3
+      },
+      {
+        "carry": 140.6,
+        "total": 140.8,
+        "lat": 8.5,
+        "bs": 108.5,
+        "chs": 88.9,
+        "height": 89.7,
+        "curve": 9.6
+      },
+      {
+        "carry": 141.8,
+        "total": 142.1,
+        "lat": 5.9,
+        "bs": 105.9,
+        "chs": 91,
+        "height": 73.3,
+        "curve": 6
+      },
+      {
+        "carry": 134.2,
+        "total": 133.7,
+        "lat": 5.5,
+        "bs": 102.9,
+        "chs": 89.3,
+        "height": 91.8,
+        "curve": 3
+      },
+      {
+        "carry": 135.9,
+        "total": 135.2,
+        "lat": 6.3,
+        "bs": 106.4,
+        "chs": 88.8,
+        "height": 89.6,
+        "curve": 4.8
+      },
+      {
+        "carry": 142,
+        "total": 141.4,
+        "lat": -4.1,
+        "bs": 109.1,
+        "chs": 90.4,
+        "height": 89.9,
+        "curve": -2.5
+      },
+      {
+        "carry": 126.5,
+        "total": 125.6,
+        "lat": 1.9,
+        "bs": 104.3,
+        "chs": 89.4,
+        "height": 85.1,
+        "curve": 1.9
+      },
+      {
+        "carry": 138.2,
+        "total": 137.4,
+        "lat": 0.8,
+        "bs": 108.2,
+        "chs": 91.6,
+        "height": 91,
+        "curve": 2.9
+      }
+    ],
     "carrySd": 5.2,
     "lateralSd": 3.8,
     "carryMax": 142,
@@ -136,6 +632,116 @@
     "ftp": -0.1,
     "height": 116,
     "descent": 44.1,
+    "shotList": [
+      {
+        "carry": 252.8,
+        "total": 255.8,
+        "lat": 10.3,
+        "bs": 148.4,
+        "chs": 110.2,
+        "height": 124.6,
+        "curve": 3.5
+      },
+      {
+        "carry": 260,
+        "total": 263,
+        "lat": 9.7,
+        "bs": 154.6,
+        "chs": 111.2,
+        "height": 134.5,
+        "curve": -9.4
+      },
+      {
+        "carry": 240.4,
+        "total": 241.9,
+        "lat": 60.1,
+        "bs": 153,
+        "chs": 111.4,
+        "height": 146.8,
+        "curve": 40.2
+      },
+      {
+        "carry": 257.6,
+        "total": 265.5,
+        "lat": -13.3,
+        "bs": 150.6,
+        "chs": 103,
+        "height": 101.1,
+        "curve": -25.4
+      },
+      {
+        "carry": 248.9,
+        "total": 264.3,
+        "lat": -7.8,
+        "bs": 146.7,
+        "chs": 100.3,
+        "height": 77.1,
+        "curve": -33.4
+      },
+      {
+        "carry": 264.1,
+        "total": 266.3,
+        "lat": -2,
+        "bs": 158.3,
+        "chs": 112.2,
+        "height": 160.8,
+        "curve": -6.6
+      },
+      {
+        "carry": 218.7,
+        "total": 241.7,
+        "lat": 11.1,
+        "bs": 146.7,
+        "chs": 110.5,
+        "height": 36.9,
+        "curve": 5.8
+      },
+      {
+        "carry": 234.6,
+        "total": 236.4,
+        "lat": 28.1,
+        "bs": 148.7,
+        "chs": 112.5,
+        "height": 137.3,
+        "curve": 26.5
+      },
+      {
+        "carry": 238,
+        "total": 240.5,
+        "lat": 43.6,
+        "bs": 146.7,
+        "chs": 102,
+        "height": 120.8,
+        "curve": 20.3
+      },
+      {
+        "carry": 243.8,
+        "total": 245.8,
+        "lat": 18.1,
+        "bs": 149,
+        "chs": 103.1,
+        "height": 141.5,
+        "curve": -7.1
+      },
+      {
+        "carry": 260.3,
+        "total": 263.5,
+        "lat": 6.3,
+        "bs": 152.9,
+        "chs": 110.6,
+        "height": 137.6,
+        "curve": -3.2
+      },
+      {
+        "carry": 121.7,
+        "total": 122,
+        "lat": 9.4,
+        "bs": 91.6,
+        "chs": 74.9,
+        "height": 72.7,
+        "curve": 2
+      }
+    ],
     "carrySd": 36.9,
     "lateralSd": 20,
     "carryMax": 264.1,
@@ -160,6 +766,80 @@
     "ftp": 2.8,
     "height": 76,
     "descent": 48.7,
+    "shotList": [
+      {
+        "carry": 105.4,
+        "total": 105.1,
+        "lat": 9.9,
+        "bs": 90.6,
+        "chs": 87.4,
+        "height": 82.7,
+        "curve": 0.2
+      },
+      {
+        "carry": 104,
+        "total": 103.8,
+        "lat": 11.5,
+        "bs": 86.9,
+        "chs": 82.7,
+        "height": 79.1,
+        "curve": 1.9
+      },
+      {
+        "carry": 103.5,
+        "total": 103.1,
+        "lat": 23.8,
+        "bs": 83.5,
+        "chs": 86.4,
+        "height": 86.2,
+        "curve": 6.2
+      },
+      {
+        "carry": 119.5,
+        "total": 119.2,
+        "lat": 5.7,
+        "bs": 93.7,
+        "chs": 89.3,
+        "height": 91.1,
+        "curve": -2.3
+      },
+      {
+        "carry": 104.1,
+        "total": 104.6,
+        "lat": 21.5,
+        "bs": 85.4,
+        "chs": 84.9,
+        "height": 80.7,
+        "curve": 10
+      },
+      {
+        "carry": 104.8,
+        "total": 104.8,
+        "lat": 12.4,
+        "bs": 83.1,
+        "chs": 83.8,
+        "height": 76.3,
+        "curve": 3.3
+      },
+      {
+        "carry": 94.5,
+        "total": 96.7,
+        "lat": 15.5,
+        "bs": 79.6,
+        "chs": 76.7,
+        "height": 41.9,
+        "curve": 5.5
+      },
+      {
+        "carry": 114.9,
+        "total": 115.6,
+        "lat": 9.4,
+        "bs": 88.8,
+        "chs": 79.9,
+        "height": 69.2,
+        "curve": -0.5
+      }
+    ],
     "carrySd": 7.1,
     "lateralSd": 5.8,
     "carryMax": 119.5,

@@ -47,3 +47,13 @@ export async function seedIfEmpty() {
   });
   return true;
 }
+
+/** Backfill per-shot data for TrackMan sessions seeded before shotList existed. */
+export async function upgradeSeed() {
+  const rows = await db.sessions.where('playerId').equals(PLAYER_ID).toArray();
+  for (const r of rows) {
+    if (r.shotList?.length || r.source !== 'trackman') continue;
+    const m = trackman.find(t => t.date === r.date && t.club === r.club);
+    if (m) await db.sessions.update(r.id, { shotList: m.shotList, carrySd: m.carrySd, lateralSd: m.lateralSd, carryMax: m.carryMax });
+  }
+}
