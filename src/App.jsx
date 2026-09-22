@@ -10,6 +10,7 @@ import TrackMan from './components/TrackMan.jsx';
 import OnCourse from './components/OnCourse.jsx';
 import Lessons from './components/Lessons.jsx';
 import Data from './components/Data.jsx';
+import Academy from './components/Academy.jsx';
 import { decodeShare } from './lib/share.js';
 import { importAll } from './db/repo.js';
 
@@ -28,6 +29,9 @@ export default function App() {
   const sessions = useLiveQuery(() => db.sessions.where('playerId').equals(PLAYER_ID).sortBy('date'), [], []);
   const rounds = useLiveQuery(() => db.rounds.where('playerId').equals(PLAYER_ID).sortBy('date'), [], []);
   const lessons = useLiveQuery(() => db.lessons.where('playerId').equals(PLAYER_ID).sortBy('date'), [], []);
+  const academyLessons = useLiveQuery(() => db.academy.where('playerId').equals(PLAYER_ID).sortBy('order'), [], []);
+  const ratings = useLiveQuery(() => db.ratings.where('playerId').equals(PLAYER_ID).toArray(), [], []);
+  const watched = useLiveQuery(() => db.watched.where('playerId').equals(PLAYER_ID).toArray(), [], []);
   const examples = useLiveQuery(async () => (await db.meta.get('examples'))?.value ?? false, [], false);
 
   const initials = (player?.name || 'P').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -50,6 +54,7 @@ export default function App() {
           tab === 'trackman' ? <TrackMan sessions={sessions} goals={goals} /> :
           tab === 'course' ? <OnCourse rounds={rounds} goals={goals} /> :
           tab === 'lessons' ? <Lessons lessons={lessons} bp={bp} goals={goals} /> :
+          tab === 'academy' ? <Academy lessons={academyLessons} ratings={ratings} watched={watched} isCoach isPro /> :
           <Data examples={examples} counts={{ sessions: sessions.length, rounds: rounds.length, lessons: lessons.length }} />}
       </main>
       <TabBar tab={tab} onChange={setTab} />

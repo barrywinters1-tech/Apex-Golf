@@ -30,6 +30,7 @@ export default function Sheet({ open, title, onClose, children }) {
 
     let drag = null; // {startY, offset, hist:[{t,y}]}
     const onDown = e => {
+      if (e.target.closest('button, input, select, textarea, a, label, [contenteditable]')) return; // leave controls alone
       if (e.target.closest('.sheet-body') && ref.current.querySelector('.sheet-body').scrollTop > 0) return;
       anim.current?.stop();
       drag = { start: e.clientY, offset: y.current, hist: [{ t: performance.now(), y: y.current }] };

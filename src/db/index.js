@@ -19,6 +19,11 @@ db.version(1).stores({
   blueprint: 'playerId',                                      // one doc per player
   meta:      'key',
 });
+db.version(2).stores({
+  academy:   '++id, playerId, node, pro',       // a lesson: {node, title, url, notes, drills, pro, order}
+  ratings:   '[playerId+node], playerId',       // coach rating per node
+  watched:   '[playerId+lessonId], playerId',   // player progress
+});
 
 export const CLUB_ORDER = ['Driver','3 Wood','5 Wood','Hybrid','2 Iron','3 Iron','4 Iron','5 Iron','6 Iron','7 Iron','8 Iron','9 Iron','PW','Gap Wedge','GW','SW','LW'];
 export const clubRank = c => { const i = CLUB_ORDER.findIndex(x => x.toLowerCase() === String(c).toLowerCase()); return i < 0 ? 99 : i; };
@@ -33,3 +38,6 @@ export const BENCHMARKS = {
   putts: { label: 'Putts per round',         scratch: 31,  d1: 29.5, tour: 28.5 },
   score: { label: 'Scoring average',         scratch: 74,  d1: 72,  tour: 70.5 },
 };
+
+/** Coach's approach targets (his 'World's Best Approach Player' model). */
+export { APPROACH_TARGETS, GIR_TARGETS } from '../lib/academy.js';

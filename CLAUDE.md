@@ -14,6 +14,9 @@ The coach's blueprint is his own Excel format: rows (Practice station, Set-up ch
 ## Design direction (decided 21 Sep 2026)
 Apple Fitness. iOS grouped canvas (#f2f2f7) / true black in dark mode, white 22px-radius cards, system SF fonts (`ui-rounded` for numerals). Three colours do all the work: Speed pink #fa114f, Strike green #30d158, Accuracy cyan #0bd3ff; gold for targets/awards; iOS blue for actions. Hero = three closing rings from real numbers (club speed vs target, smash vs 1.48, fairway-hit % vs 70). Rejected: the "night range" dark telemetry look and the generic clean-cards look — Barry wants first-open wow, not a dashboard.
 
+## Academy (coach's competency model)
+`src/lib/academy.js` encodes Jack's "World's Best Approach Player" mind map (data/coach-model-approach-player.jpg) — his branches and wording: Strike, Distance, Direction, Skills, Equipment, Gaining access to acquired skills, Golf IQ, Stats. Each node holds lessons (YouTube/Vimeo link, notes, drills, `pro` flag), a coach rating 0–3 (`ratings` table) and player progress (`watched`). Approach targets from the Stats branch are `APPROACH_TARGETS` / `GIR_TARGETS`. Video uploads and paid Pro membership need the backend step (Supabase storage + Stripe); the schema already carries `pro`.
+
 ## Coaching knowledge
 `src/lib/knowledge.js` holds principles paraphrased from Dane Cvetkovic's e-books "The Art of Practice" and "My 10 Biggest Golf Hacks" (Barry's copies): Performance Matrix (performance → ball flight → impact laws), four game boxes, Technique/Skill/Performance practice modes, dispersion vs intended target, own-caddie routine. Copyrighted — never paste the books' text into the repo. `impactReport()` turns a TrackMan row into impact-law verdicts; the AI summariser gets `KNOWLEDGE_SUMMARY` as its frame.
 
