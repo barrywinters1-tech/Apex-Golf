@@ -7,6 +7,7 @@ import { db } from './index.js';
 import { PLAYER_ID } from './repo.js';
 import trackman from '../../data/seed/sessions.json';
 import { emptyBlueprint } from '../lib/blueprint.js';
+import { STARTER_LESSONS } from './starterLessons.js';
 
 export async function seedIfEmpty() {
   const n = await db.players.count();
@@ -50,6 +51,11 @@ export async function seedIfEmpty() {
 
 /** Backfill per-shot data for TrackMan sessions seeded before shotList existed. */
 export async function upgradeSeed() {
+  // Starter academy lessons, once.
+  if (!(await db.meta.get('starterLessons'))) {
+    if ((await db.academy.count()) === 0) await db.academy.bulkAdd(STARTER_LESSONS.map((l, i) => ({ ...l, playerId: PLAYER_ID, order: i })));
+    await db.meta.put({ key: 'starterLessons', value: true });
+  }
   const rows = await db.sessions.where('playerId').equals(PLAYER_ID).toArray();
   for (const r of rows) {
     if ((r.shotList?.length && r.shotList[0].launch != null) || r.source !== 'trackman') continue;

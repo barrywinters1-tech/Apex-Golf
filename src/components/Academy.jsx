@@ -66,7 +66,7 @@ export default function Academy({ lessons = [], ratings = [], watched = [], isCo
             {(active ? active.ls : nodesWithLessons.flatMap(x => x.ls)).map(l => { const locked = l.pro && !isPro && !isCoach; const th = videoThumb(l.url); return (
               <div className="row tappable" key={l.id} onClick={() => !locked && setPlay(l)}>
                 <div className="lthumb" style={th ? { backgroundImage: `url(${th})` } : undefined}>{locked ? '🔒' : done.has(l.id) ? '✓' : '▶'}</div>
-                <div className="grow"><div className="label">{l.title} {l.pro && <span className="pill pro">Pro</span>}</div><div className="sub">{l.notes ? l.notes.slice(0, 90) + (l.notes.length > 90 ? '…' : '') : (embedUrl(l.url) ? 'Video' : 'Link')}</div></div>
+                <div className="grow"><div className="label">{l.title} {l.pro && <span className="pill pro">Pro</span>}{l.source === 'suggested' && <span className="pill">suggested</span>}</div><div className="sub">{l.notes ? l.notes.slice(0, 90) + (l.notes.length > 90 ? '…' : '') : (embedUrl(l.url) ? 'Video' : 'Link')}</div></div>
               </div>); })}
             {!(active ? active.ls : lessons).length && <div className="empty">{isCoach ? 'Add a lesson — a YouTube or Vimeo link, notes and drills.' : 'Nothing here yet.'}</div>}
           </div>
