@@ -1,14 +1,29 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TREE, RATING, nodeId, embedUrl, videoThumb } from '../lib/academy.js';
 import { academy as repo, ratings as ratingRepo, watched as watchedRepo } from '../db/repo.js';
 import { Field, lines, formData } from './ui.jsx';
 import Sheet from './Sheet.jsx';
+
+/** Some hosts (the Claude preview) block third-party frames and images by CSP. Probe once with a YouTube thumbnail. */
+let embedProbe = null;
+function useCanEmbed() {
+  const [ok, setOk] = useState(embedProbe);
+  useEffect(() => {
+    if (embedProbe != null) return;
+    const img = new Image();
+    img.onload = () => { embedProbe = true; setOk(true); };
+    img.onerror = () => { embedProbe = false; setOk(false); };
+    img.src = 'https://i.ytimg.com/vi/CUG9nwxjcMU/default.jpg';
+  }, []);
+  return ok === true;
+}
 
 export default function Academy({ lessons = [], ratings = [], watched = [], isCoach = true, isPro = false }) {
   const [branchKey, setBranchKey] = useState(TREE[0].key);
   const [node, setNode] = useState(null);           // selected node id
   const [sheet, setSheet] = useState(false);
   const [play, setPlay] = useState(null);           // lesson being played
+  const canEmbed = useCanEmbed();
   const branch = TREE.find(b => b.key === branchKey);
   const rating = useMemo(() => Object.fromEntries(ratings.map(r => [r.node, r.value])), [ratings]);
   const done = useMemo(() => new Set(watched.map(w => w.lessonId)), [watched]);
@@ -53,7 +68,12 @@ export default function Academy({ lessons = [], ratings = [], watched = [], isCo
         <div style={{ display: 'grid', gap: 14, alignContent: 'start' }}>
           {play && (
             <div className="card player">
-              <div className="video">{embedUrl(play.url) ? <iframe src={embedUrl(play.url)} title={play.title} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : <a href={play.url} target="_blank" rel="noreferrer" className="btn">Open video ↗</a>}</div>
+              <a className="video" href={play.url} target="_blank" rel="noreferrer" aria-label={`Play ${play.title} on YouTube`}>
+                {embedUrl(play.url) && canEmbed ? <iframe src={embedUrl(play.url)} title={play.title} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : <>
+                  <div className="poster-ring"><span className="poster-play">▶</span></div>
+                  <div className="poster-lab">Play on YouTube</div>
+                </>}
+              </a>
               <div className="page-head" style={{ margin: '12px 0 0' }}><div><h3>{play.title}</h3><div className="sub" style={{ margin: 0 }}>{TREE.flatMap(b => b.nodes.map(n => [nodeId(b.key, n), `${b.label} · ${n}`])).find(([id]) => id === play.node)?.[1]}</div></div><button className={`btn ${done.has(play.id) ? '' : 'primary'}`} onClick={() => watchedRepo.toggle(play.id)}>{done.has(play.id) ? 'Watched ✓' : 'Mark watched'}</button></div>
               {play.url && <a className="btn quiet" href={play.url} target="_blank" rel="noreferrer" style={{ marginTop: 6, display: 'inline-block' }}>Open in YouTube ↗</a>}
               {play.notes && <p className="tl-notes" style={{ marginTop: 10 }}>{play.notes}</p>}
