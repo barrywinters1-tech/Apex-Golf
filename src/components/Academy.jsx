@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { TREE, RATING, nodeId, embedUrl, videoThumb } from '../lib/academy.js';
+import { TREE, RATING, nodeId, embedUrl, videoThumb, isVideoFile } from '../lib/academy.js';
+import { supabase } from '../lib/supabase.js';
+import { uuid } from '../db/index.js';
 import { academy as repo, ratings as ratingRepo, watched as watchedRepo } from '../db/repo.js';
 import { Field, lines, formData } from './ui.jsx';
 import Sheet from './Sheet.jsx';
@@ -18,7 +20,9 @@ function useCanEmbed() {
   return ok === true;
 }
 
-export default function Academy({ lessons = [], ratings = [], watched = [], isCoach = true, isPro = false }) {
+export default function Academy({ lessons = [], ratings = [], watched = [], isCoach = true, isPro = false, userId = null }) {
+  const [upload, setUpload] = useState(null);      // {pct} while uploading
+  const [uerr, setUerr] = useState('');
   const [branchKey, setBranchKey] = useState(TREE[0].key);
   const [node, setNode] = useState(null);           // selected node id
   const [sheet, setSheet] = useState(false);
@@ -68,14 +72,15 @@ export default function Academy({ lessons = [], ratings = [], watched = [], isCo
         <div style={{ display: 'grid', gap: 14, alignContent: 'start' }}>
           {play && (
             <div className="card player">
+              {isVideoFile(play.url) ? <div className="video"><video controls playsInline preload="metadata" src={play.url} /></div> :
               <a className="video" href={play.url} target="_blank" rel="noreferrer" aria-label={`Play ${play.title} on YouTube`}>
                 {embedUrl(play.url) && canEmbed ? <iframe src={embedUrl(play.url)} title={play.title} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : <>
                   <div className="poster-ring"><span className="poster-play">▶</span></div>
                   <div className="poster-lab">Play on YouTube</div>
                 </>}
-              </a>
+              </a>}
               <div className="page-head" style={{ margin: '12px 0 0' }}><div><h3>{play.title}</h3><div className="sub" style={{ margin: 0 }}>{TREE.flatMap(b => b.nodes.map(n => [nodeId(b.key, n), `${b.label} · ${n}`])).find(([id]) => id === play.node)?.[1]}</div></div><button className={`btn ${done.has(play.id) ? '' : 'primary'}`} onClick={() => watchedRepo.toggle(play.id)}>{done.has(play.id) ? 'Watched ✓' : 'Mark watched'}</button></div>
-              {play.url && <a className="btn quiet" href={play.url} target="_blank" rel="noreferrer" style={{ marginTop: 6, display: 'inline-block' }}>Open in YouTube ↗</a>}
+              {play.url && !isVideoFile(play.url) && <a className="btn quiet" href={play.url} target="_blank" rel="noreferrer" style={{ marginTop: 6, display: 'inline-block' }}>Open in YouTube ↗</a>}
               {play.notes && <p className="tl-notes" style={{ marginTop: 10 }}>{play.notes}</p>}
               {play.drills?.length > 0 && <div style={{ marginTop: 8 }}><div className="tl-k">Drills</div>{play.drills.map((d, i) => <span className="tag" key={i}>{d}</span>)}</div>}
               {isCoach && <div className="tl-foot"><button className="btn danger" onClick={() => { repo.remove(play.id); setPlay(null); }}>Remove</button></div>}
@@ -86,7 +91,7 @@ export default function Academy({ lessons = [], ratings = [], watched = [], isCo
             {(active ? active.ls : nodesWithLessons.flatMap(x => x.ls)).map(l => { const locked = l.pro && !isPro && !isCoach; const th = videoThumb(l.url); return (
               <div className="row tappable" key={l.id} onClick={() => !locked && setPlay(l)}>
                 <div className="lthumb" style={th ? { backgroundImage: `url(${th})` } : undefined}>{locked ? '🔒' : done.has(l.id) ? '✓' : '▶'}</div>
-                <div className="grow"><div className="label">{l.title} {l.pro && <span className="pill pro">Pro</span>}{l.source === 'suggested' && <span className="pill">suggested</span>}</div><div className="sub">{l.notes ? l.notes.slice(0, 90) + (l.notes.length > 90 ? '…' : '') : (embedUrl(l.url) ? 'Video' : 'Link')}</div></div>
+                <div className="grow"><div className="label">{l.title} {l.pro && <span className="pill pro">Pro</span>}{l.source === 'suggested' && <span className="pill">suggested</span>}</div><div className="sub">{l.notes ? l.notes.slice(0, 90) + (l.notes.length > 90 ? '…' : '') : (isVideoFile(l.url) ? 'Uploaded video' : embedUrl(l.url) ? 'Video' : 'Link')}</div></div>
               </div>); })}
             {!(active ? active.ls : lessons).length && <div className="empty">{isCoach ? 'Add a lesson — a YouTube or Vimeo link, notes and drills.' : 'Nothing here yet.'}</div>}
           </div>
@@ -94,14 +99,30 @@ export default function Academy({ lessons = [], ratings = [], watched = [], isCo
       </div>
 
       <Sheet open={sheet} title="Add lesson" onClose={() => setSheet(false)}>
-        <form className="fields" onSubmit={async e => { e.preventDefault(); const d = formData(e.target); await repo.add({ node: d.node, title: d.title.trim(), url: d.url.trim(), notes: d.notes.trim(), drills: lines(d.drills), pro: d.pro === 'on' }); setSheet(false); }}>
+        <form className="fields" onSubmit={async e => { e.preventDefault(); const form = e.target; const d = formData(form); setUerr('');
+          let url = d.url.trim();
+          const file = form.querySelector('input[name=file]')?.files?.[0];
+          if (file) {
+            if (!supabase || !userId) { setUerr('Video upload needs an account — paste a YouTube link instead.'); return; }
+            if (file.size > 50 * 1024 * 1024) { setUerr('Keep uploads under 50 MB (free tier). Trim it or use YouTube unlisted.'); return; }
+            setUpload({ pct: 0 });
+            const ext = (file.name.split('.').pop() || 'mp4').toLowerCase();
+            const path = `${userId}/${uuid()}.${ext}`;
+            const { error } = await supabase.storage.from('videos').upload(path, file, { contentType: file.type || 'video/mp4', upsert: false });
+            setUpload(null);
+            if (error) { setUerr(error.message); return; }
+            url = supabase.storage.from('videos').getPublicUrl(path).data.publicUrl;
+          }
+          await repo.add({ node: d.node, title: d.title.trim(), url, notes: d.notes.trim(), drills: lines(d.drills), pro: d.pro === 'on' }); setSheet(false); }}>
           <Field id="a-node" label="Skill" className="wide"><select id="a-node" name="node" defaultValue={node || nodeId(branch.key, branch.nodes[0])}>{TREE.map(b => <optgroup key={b.key} label={b.label}>{b.nodes.map(n => <option key={n} value={nodeId(b.key, n)}>{n}</option>)}</optgroup>)}</select></Field>
           <Field id="a-title" label="Title" className="wide"><input id="a-title" name="title" required placeholder="e.g. Low point control with the towel drill" /></Field>
           <Field id="a-url" label="YouTube or Vimeo link" className="wide"><input id="a-url" name="url" type="url" placeholder="https://youtu.be/…  (unlisted is fine)" /></Field>
+          {supabase && userId && <Field id="a-file" label="…or upload a video (mp4/mov, under 50 MB)" className="wide"><input id="a-file" name="file" type="file" accept="video/mp4,video/quicktime,video/webm" /></Field>}
           <Field id="a-notes" label="What to look for" className="wide"><textarea id="a-notes" name="notes" /></Field>
           <Field id="a-drills" label="Drills · one per line" className="wide"><textarea id="a-drills" name="drills" /></Field>
           <label className="check wide"><input type="checkbox" name="pro" /> Pro members only</label>
-          <button className="btn primary block wide" type="submit">Add lesson</button>
+          <button className="btn primary block wide" type="submit" disabled={!!upload}>{upload ? 'Uploading…' : 'Add lesson'}</button>
+          {uerr && <p className="status wide" style={{ color: 'var(--speed)' }}>{uerr}</p>}
         </form>
       </Sheet>
     </div>

@@ -35,4 +35,7 @@ export function embedUrl(url = '') {
   if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
   return null;
 }
+/** A direct video file (uploaded to storage) rather than an embed. */
+export const isVideoFile = (url = '') => /\.(mp4|m4v|mov|webm)(\?|#|$)/i.test(url) || /\/storage\/v1\/object\/public\/videos\//.test(url);
+
 export const videoThumb = (url = '') => { const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/); return yt ? `https://i.ytimg.com/vi/${yt[1]}/hqdefault.jpg` : null; };

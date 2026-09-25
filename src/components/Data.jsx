@@ -14,7 +14,7 @@ function importRounds(text, fallbackDate) {
   return rows.slice(1).map(r => ({ date: normDate(g(r, c.date)) || fallbackDate, course: (g(r, c.course) || 'Round').trim(), par: num(g(r, c.par)) ?? 72, score: num(g(r, c.score)), fir: num(g(r, c.fir)), firOf: num(g(r, c.firOf)) ?? 14, gir: num(g(r, c.gir)), putts: num(g(r, c.putts)), upDown: num(g(r, c.ud)), upDownOf: num(g(r, c.udo)), pen: num(g(r, c.pen)), sgT: num(g(r, c.sgT)), sgA: num(g(r, c.sgA)), sgG: num(g(r, c.sgG)), sgP: num(g(r, c.sgP)), source: 'import' })).filter(r => r.score != null);
 }
 
-export default function Data({ examples, counts = {} }) {
+export default function Data({ examples, counts = {}, cloud = false, isCoach = true }) {
   const [type, setType] = useState('trackman');
   const [date, setDate] = useState('');
   const [notes, setNotes] = useState('Range, low-compression balls');
@@ -53,7 +53,7 @@ export default function Data({ examples, counts = {} }) {
 
       <div className="share-card">
         <div className="share-top">
-          <div><div className="k">Share with your coach</div><h2>One link, everything on this device</h2><div className="s">{counts.sessions ?? 0} TrackMan sessions · {counts.rounds ?? 0} rounds · {counts.lessons ?? 0} lessons · blueprint · goals. No account, no server — re-send after each update.</div></div>
+          <div><div className="k">Share with your coach</div><h2>One link, everything on this device</h2><div className="s">{counts.sessions ?? 0} TrackMan sessions · {counts.rounds ?? 0} rounds · {counts.lessons ?? 0} lessons · blueprint · goals. {cloud ? 'Your account syncs automatically; this link is for anyone without one.' : 'No account, no server — re-send after each update.'}</div></div>
         </div>
         <div className="share-actions">
           <button className="btn share-btn" onClick={async () => { const u = await encodeShare(await exportAll()); setShare(u); try { await navigator.clipboard.writeText(u); setSstatus(`Link copied · ${(u.length / 1024).toFixed(1)} KB`); } catch { setSstatus('Copy the link below.'); } }}>Create share link</button>
@@ -82,7 +82,7 @@ export default function Data({ examples, counts = {} }) {
             <div className="wide" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
               <button className="btn" onClick={async () => setJson(JSON.stringify(await exportAll(), null, 1))}>Show current</button>
               <button className="btn" onClick={async () => { const j = JSON.stringify(await exportAll()); setJson(j); try { await navigator.clipboard.writeText(j); setJstatus('Copied.'); } catch { setJstatus('Select and copy manually.'); } }}>Copy</button>
-              <button className="btn danger" onClick={async () => { if (!confirm('Replace all data on this device with the pasted JSON?')) return; try { await importAll(JSON.parse(json)); setJstatus('Replaced.'); } catch (e) { setJstatus(e.message); } }}>Replace with pasted</button>
+              <button className="btn danger" onClick={async () => { if (!confirm('Replace all data on this device with the pasted JSON?')) return; try { await importAll(JSON.parse(json), { library: isCoach }); setJstatus('Replaced.'); } catch (e) { setJstatus(e.message); } }}>Replace with pasted</button>
               <span className="status">{jstatus}</span>
             </div>
           </div>

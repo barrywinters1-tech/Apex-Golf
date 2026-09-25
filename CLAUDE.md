@@ -31,10 +31,16 @@ Apple Fitness. iOS grouped canvas (#f2f2f7) / true black in dark mode, white 22p
 - `npm run import -- --notes "..."` — regenerate `data/seed/sessions.json` from `data/trackman/*.csv` (file name gives the date).
 - `npm run ai` — local summariser on :8787 (needs `ANTHROPIC_API_KEY`); set `VITE_AI_ENDPOINT=/api/summarise` in `.env.local`.
 
-## Sharing model (current)
-No backend. `src/lib/share.js` encodes `exportAll()` into a `#share=` URL; `App.jsx` offers to import it on load. Replace with Supabase sync when multi-user is needed; keep the share link as an offline fallback.
+## Accounts and sync (added 25 Sep 2026)
+Supabase, optional. `src/lib/supabase.js` builds a client only when `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` are set; otherwise the app is offline-only with a `'local'` player. Schema in `supabase/schema.sql` (run once in the SQL editor): `profiles` (role player|coach), `players` (coach_id, user_id, email), `rows` (player_id, tbl, id, data jsonb — every per-player record), `library` (coach_id, id, data — academy lessons shared by a coach's players), storage bucket `videos` (public read, coach-only write under `<uid>/`). RLS: a player sees their own rows; a coach sees every player with `coach_id = uid`.
+- Dexie stays the UI's store. `repo.js` writes locally then queues an `outbox` item; `sync.js` flushes to Supabase and pulls a player's rows on sign-in / roster switch (`session.js`). No realtime.
+- Ids are client uuids (`db/index.js` `uuid()`); DB renamed `apex-golf-v3`, `migrateLegacy()` copies the old integer-id store once.
+- Scope is module state in `repo.js` (`getPlayerId()` / `getLibraryId()`, `setScope`); `App.jsx` subscribes so live queries re-run on roster switch.
+- Sign-in is passwordless (`signInWithOtp`, link or 6-digit code). Make someone a coach with SQL: `update profiles set role='coach' where email='…'`. A coach adds players by email (`add_player` RPC); when that email signs in it links.
+- Share link (`src/lib/share.js`) still works as the no-account fallback; `importAll` re-keys ids under the current player.
 
 ## Known gaps / next
 - Real rounds data (UpGame/Arccos export) — rounds importer is header-matched, untested on a real file.
-- Multi-player + auth (Supabase). Coach roster view.
+- Pro membership (Stripe) — `pro` flag exists on lessons and `player.pro`; no payment yet.
+- Video bucket is public-read; switch to signed URLs before any paid content.
 - CoachNow has no public API: lessons link to CoachNow posts by URL only.

@@ -4,14 +4,16 @@
  * blueprint text are EXAMPLES flagged source:'example' until real ones replace them.
  */
 import { db } from './index.js';
-import { PLAYER_ID } from './repo.js';
+import { getLibraryId, academy } from './repo.js';
+import { uuid } from './index.js';
+
+const PLAYER_ID = 'local'; // the seed is this device's offline player; cloud players start blank
 import trackman from '../../data/seed/sessions.json';
 import { emptyBlueprint } from '../lib/blueprint.js';
 import { STARTER_LESSONS } from './starterLessons.js';
 
 export async function seedIfEmpty() {
-  const n = await db.players.count();
-  if (n) return false;
+  if (await db.players.get(PLAYER_ID)) return false;
   await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.meta, async () => {
     await db.players.put({ id: PLAYER_ID, name: 'Barry Winters', handicap: '', homeClub: '', coach: 'Jack', academy: '', ambition: 'Consistent single-figure golf; a measurable development roadmap with Jack' });
     const bp = emptyBlueprint(); // Swing area transcribed from the coach's "Barry Winters Blueprints" PDF; other areas blank
@@ -31,35 +33,41 @@ export async function seedIfEmpty() {
       { area: 'Approach', metric: 'Greens in regulation', unit: '%', baseline: 42, current: 42, target: 50, by: '2027-03-31', source: 'example' },
       { area: 'Putting',  metric: 'Putts per round', unit: '', baseline: 33, current: 33, target: 31, by: '2027-03-31', source: 'example' },
       { area: 'Scoring',  metric: 'Scoring average', unit: '', baseline: 82.6, current: 82.6, target: 79, by: '2027-06-30', source: 'example' },
-    ].map(g => ({ ...g, playerId: PLAYER_ID })));
-    await db.sessions.bulkAdd(trackman.map(s => ({ ...s, playerId: PLAYER_ID })));
+    ].map(g => ({ ...g, id: uuid(), playerId: PLAYER_ID })));
+    await db.sessions.bulkAdd(trackman.map(s => ({ ...s, id: uuid(), playerId: PLAYER_ID })));
     await db.rounds.bulkAdd([
       { date: '2026-06-20', course: 'Home course', par: 72, score: 86, fir: 6, firOf: 14, gir: 6, putts: 35, upDown: 2, upDownOf: 8, pen: 2, sgT: -2.1, sgA: -4.0, sgG: -1.8, sgP: -1.6 },
       { date: '2026-07-18', course: 'Home course', par: 72, score: 83, fir: 7, firOf: 14, gir: 7, putts: 34, upDown: 3, upDownOf: 8, pen: 1, sgT: -1.6, sgA: -3.5, sgG: -1.4, sgP: -1.2 },
       { date: '2026-08-08', course: 'Away',        par: 71, score: 84, fir: 8, firOf: 14, gir: 8, putts: 33, upDown: 4, upDownOf: 8, pen: 2, sgT: -1.2, sgA: -3.6, sgG: -1.0, sgP: -0.9 },
       { date: '2026-08-29', course: 'Home course', par: 72, score: 81, fir: 8, firOf: 14, gir: 8, putts: 33, upDown: 4, upDownOf: 7, pen: 0, sgT: -1.0, sgA: -3.0, sgG: -0.9, sgP: -0.8 },
       { date: '2026-09-13', course: 'Home course', par: 72, score: 79, fir: 9, firOf: 14, gir: 9, putts: 31, upDown: 5, upDownOf: 8, pen: 1, sgT: -0.6, sgA: -2.6, sgG: -0.6, sgP: -0.3 },
-    ].map(r => ({ ...r, source: 'example', playerId: PLAYER_ID })));
+    ].map(r => ({ ...r, id: uuid(), source: 'example', playerId: PLAYER_ID })));
     await db.lessons.bulkAdd([
       { date: '2026-08-14', focus: 'Driver start line', notes: 'Example lesson. Face 3–4° open at impact with an out-to-in path. Worked on lead-wrist flexion at the top and a feel of the club exiting left.', drills: ['Alignment-stick gate, 20 balls at 80%', 'Pump drill to P6, 3×10', 'Film 5 swings down-the-line each session'], priorities: ['Start line inside 10 yds either side', 'Keep smash ≥ 1.46'] },
       { date: '2026-09-11', focus: 'Wedge distance control', notes: 'Example lesson. Three-length system (7:30 / 9:00 / 10:30) with PW and gap wedge; carry numbers logged on TrackMan.', drills: ['Ladder drill 60–110 yds, 2 balls per number', 'Clock-system calibration fortnightly'], priorities: ['Proximity from 100 yds inside 25 ft'] },
-    ].map(l => ({ ...l, source: 'example', playerId: PLAYER_ID })));
+    ].map(l => ({ ...l, id: uuid(), source: 'example', playerId: PLAYER_ID })));
     await db.meta.put({ key: 'examples', value: true });
   });
   return true;
 }
 
-/** Backfill per-shot data for TrackMan sessions seeded before shotList existed. */
+/** Starter academy lessons for an empty library (once per library), and shotList backfill for old local sessions. */
 export async function upgradeSeed() {
-  // Starter academy lessons, once.
-  if (!(await db.meta.get('starterLessons'))) {
-    if ((await db.academy.count()) === 0) await db.academy.bulkAdd(STARTER_LESSONS.map((l, i) => ({ ...l, playerId: PLAYER_ID, order: i })));
-    await db.meta.put({ key: 'starterLessons', value: true });
-  }
+  await seedStarterLessons(getLibraryId());
   const rows = await db.sessions.where('playerId').equals(PLAYER_ID).toArray();
   for (const r of rows) {
     if ((r.shotList?.length && r.shotList[0].launch != null) || r.source !== 'trackman') continue;
     const m = trackman.find(t => t.date === r.date && t.club === r.club);
     if (m) await db.sessions.update(r.id, { shotList: m.shotList, carrySd: m.carrySd, lateralSd: m.lateralSd, carryMax: m.carryMax });
   }
+}
+
+export async function seedStarterLessons(libId) {
+  const key = `starterLessons:${libId}`;
+  if ((await db.meta.get(key))?.value) return false;
+  if ((await db.academy.where('playerId').equals(libId).count()) === 0) {
+    for (const [i, l] of STARTER_LESSONS.entries()) await academy.add({ ...l, order: i });
+  }
+  await db.meta.put({ key, value: true });
+  return true;
 }
