@@ -13,8 +13,10 @@ import { emptyBlueprint } from '../lib/blueprint.js';
 import { STARTER_LESSONS } from './starterLessons.js';
 
 export async function seedIfEmpty() {
-  if (await db.players.get(PLAYER_ID)) return false;
-  await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.meta, async () => {
+  // The check lives inside the rw transaction so two concurrent calls (React StrictMode
+  // runs mount effects twice in dev) serialise instead of both seeding.
+  return db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.meta, async () => {
+    if (await db.players.get(PLAYER_ID)) return false;
     await db.players.put({ id: PLAYER_ID, name: 'Barry Winters', handicap: '', homeClub: '', coach: 'Jack', academy: '', ambition: 'Consistent single-figure golf; a measurable development roadmap with Jack' });
     const bp = emptyBlueprint(); // Swing area transcribed from the coach's "Barry Winters Blueprints" PDF; other areas blank
     Object.assign(bp.areas.swing, {
@@ -47,12 +49,30 @@ export async function seedIfEmpty() {
       { date: '2026-09-11', focus: 'Wedge distance control', notes: 'Example lesson. Three-length system (7:30 / 9:00 / 10:30) with PW and gap wedge; carry numbers logged on TrackMan.', drills: ['Ladder drill 60–110 yds, 2 balls per number', 'Clock-system calibration fortnightly'], priorities: ['Proximity from 100 yds inside 25 ft'] },
     ].map(l => ({ ...l, id: uuid(), source: 'example', playerId: PLAYER_ID })));
     await db.meta.put({ key: 'examples', value: true });
+    return true;
   });
-  return true;
+}
+
+/** One-time clean-up of the double seed: drop rows identical in everything but id. */
+export async function dedupeSeed() {
+  if ((await db.meta.get('dedupedSeed'))?.value) return 0;
+  let n = 0;
+  await db.transaction('rw', db.goals, db.sessions, db.rounds, db.lessons, db.meta, async () => {
+    for (const t of ['goals', 'sessions', 'rounds', 'lessons']) {
+      const seen = new Set();
+      for (const r of await db[t].where('playerId').equals(PLAYER_ID).toArray()) {
+        const { id, ...rest } = r; const k = JSON.stringify(rest);
+        if (seen.has(k)) { await db[t].delete(id); n++; } else seen.add(k);
+      }
+    }
+    await db.meta.put({ key: 'dedupedSeed', value: true });
+  });
+  return n;
 }
 
 /** Starter academy lessons for an empty library (once per library), and shotList backfill for old local sessions. */
 export async function upgradeSeed() {
+  await dedupeSeed();
   await seedStarterLessons(getLibraryId());
   const rows = await db.sessions.where('playerId').equals(PLAYER_ID).toArray();
   for (const r of rows) {

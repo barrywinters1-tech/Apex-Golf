@@ -78,3 +78,16 @@ describe('cloud mirror', () => {
     expect(rows.find(r => r.tbl === 'watched').id).toBe(lib.id); // watched follows the re-keyed lesson
   });
 });
+
+describe('seed', () => {
+  it('seeds once under concurrent calls and dedupes an old double seed', async () => {
+    await Promise.all(db.tables.map(t => t.clear()));
+    const { seedIfEmpty, dedupeSeed } = await import('../src/db/seed.js');
+    const r = await Promise.all([seedIfEmpty(), seedIfEmpty()]);
+    expect(r.filter(Boolean)).toHaveLength(1);
+    const rounds = await db.rounds.count();
+    const one = (await db.rounds.toArray())[0]; await db.rounds.add({ ...one, id: 'dup' });
+    expect(await dedupeSeed()).toBe(1);
+    expect(await db.rounds.count()).toBe(rounds);
+  });
+});

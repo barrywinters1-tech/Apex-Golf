@@ -493,3 +493,6 @@ svg.clock .ball { fill: #fff; stroke: var(--ink-3); }
   .tabbar svg { width: 24px; height: 24px; }
 }
 @media (max-width: 760px) { .tabbar button span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
+
+/* Grid children must be allowed to shrink below their content (wide tables scroll inside instead of widening the page). */
+.grid > * { min-width: 0; }
