@@ -25,7 +25,7 @@ create index if not exists players_coach on public.players(coach_id);
 create index if not exists players_user on public.players(user_id);
 create unique index if not exists players_email_coach on public.players(lower(email), coach_id);
 
--- All per-player app data, one row per local record. tbl ∈ player, blueprint, goals, sessions, rounds, lessons, ratings, watched.
+-- All per-player app data, one row per local record. tbl ∈ player, blueprint, goals, sessions, rounds, lessons, practice, ratings, watched.
 create table if not exists public.rows (
   player_id uuid not null references public.players(id) on delete cascade,
   tbl text not null,

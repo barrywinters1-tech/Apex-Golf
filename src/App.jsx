@@ -13,6 +13,7 @@ import OnCourse from './components/OnCourse.jsx';
 import Lessons from './components/Lessons.jsx';
 import Data from './components/Data.jsx';
 import Academy from './components/Academy.jsx';
+import Practice from './components/Practice.jsx';
 import Login from './components/Login.jsx';
 import Roster from './components/Roster.jsx';
 import { decodeShare } from './lib/share.js';
@@ -39,6 +40,7 @@ export default function App() {
   const sessions = useLiveQuery(() => db.sessions.where('playerId').equals(pid).sortBy('date'), [pid], []);
   const rounds = useLiveQuery(() => db.rounds.where('playerId').equals(pid).sortBy('date'), [pid], []);
   const lessons = useLiveQuery(() => db.lessons.where('playerId').equals(pid).sortBy('date'), [pid], []);
+  const practice = useLiveQuery(() => db.practice.where('playerId').equals(pid).sortBy('date'), [pid], []);
   const academyLessons = useLiveQuery(() => db.academy.where('playerId').equals(lid).sortBy('order'), [lid], []);
   const ratings = useLiveQuery(() => db.ratings.where('playerId').equals(pid).toArray(), [pid], []);
   const watched = useLiveQuery(() => db.watched.where('playerId').equals(pid).toArray(), [pid], []);
@@ -72,9 +74,10 @@ export default function App() {
           tab === 'blueprint' ? <Blueprint player={player} bp={bp} goals={goals} sessions={sessions} rounds={rounds} /> :
           tab === 'trackman' ? <TrackMan sessions={sessions} goals={goals} /> :
           tab === 'course' ? <OnCourse rounds={rounds} goals={goals} /> :
+          tab === 'practice' ? <Practice rounds={rounds} sessions={sessions} ratings={ratings} bp={bp} practice={practice} academyLessons={academyLessons} watched={watched} /> :
           tab === 'lessons' ? <Lessons lessons={lessons} bp={bp} goals={goals} /> :
           tab === 'academy' ? <Academy lessons={academyLessons} ratings={ratings} watched={watched} isCoach={isCoach} isPro={isCoach || !!player?.pro} libraryId={lid} userId={session.user?.id} /> :
-          <Data examples={examples} counts={{ sessions: sessions.length, rounds: rounds.length, lessons: lessons.length }} cloud={session.cloud} isCoach={isCoach} />}
+          <Data examples={examples} counts={{ sessions: sessions.length, rounds: rounds.length, lessons: lessons.length, practice: practice.length }} cloud={session.cloud} isCoach={isCoach} />}
       </main>
       <TabBar tab={tab} onChange={setTab} />
       <Roster open={roster} onClose={() => setRoster(false)} session={session} />

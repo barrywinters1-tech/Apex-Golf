@@ -40,6 +40,7 @@ export const goals = perPlayer('goals');
 export const sessions = perPlayer('sessions', 'date');
 export const rounds = perPlayer('rounds', 'date');
 export const lessons = perPlayer('lessons', 'date');
+export const practice = perPlayer('practice', 'date');
 
 /** Academy lessons live in the coach's library, shared by every player they coach. */
 export const academy = {
@@ -64,8 +65,8 @@ export const watched = {
 /** Full export / import for backup and for moving between machines. */
 export async function exportAll(playerId = P(), libraryId = L()) {
   const q = t => db[t].where('playerId').equals(playerId).toArray();
-  const [p, b, g, s, r, l, a, ra, w] = await Promise.all([db.players.get(playerId), db.blueprint.get(playerId), q('goals'), q('sessions'), q('rounds'), q('lessons'), db.academy.where('playerId').equals(libraryId).toArray(), q('ratings'), q('watched')]);
-  return { version: 3, exportedAt: new Date().toISOString(), player: p, blueprint: b, goals: g, sessions: s, rounds: r, lessons: l, academy: a, ratings: ra, watched: w };
+  const [p, b, g, s, r, l, a, ra, w, pr] = await Promise.all([db.players.get(playerId), db.blueprint.get(playerId), q('goals'), q('sessions'), q('rounds'), q('lessons'), db.academy.where('playerId').equals(libraryId).toArray(), q('ratings'), q('watched'), q('practice')]);
+  return { version: 3, exportedAt: new Date().toISOString(), player: p, blueprint: b, goals: g, sessions: s, rounds: r, lessons: l, practice: pr, academy: a, ratings: ra, watched: w };
 }
 
 /** Replace the current player's data (and, if allowed, the library) with an export. Mirrors to the cloud. */
@@ -75,12 +76,12 @@ export async function importAll(data, { library = true } = {}) {
   const strip = arr => (arr || []).map(({ id, ...rest }) => stamp({ ...rest, playerId: p }));
   const idMap = new Map();
   const ac = library ? (data.academy || []).map(({ id, ...rest }) => { const n = uuid(); idMap.set(id, n); return { ...rest, id: n, playerId: lib }; }) : [];
-  const rows = { goals: strip(data.goals), sessions: strip(data.sessions), rounds: strip(data.rounds), lessons: strip(data.lessons) };
+  const rows = { goals: strip(data.goals), sessions: strip(data.sessions), rounds: strip(data.rounds), lessons: strip(data.lessons), practice: strip(data.practice) };
   const ratingsRows = (data.ratings || []).map(r => ({ ...r, playerId: p }));
   const watchedRows = library ? (data.watched || []).filter(w => idMap.has(w.lessonId)).map(w => ({ ...w, lessonId: idMap.get(w.lessonId), playerId: p })) : [];
   const existing = {};
-  await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.academy, db.ratings, db.watched, async () => {
-    for (const t of ['goals', 'sessions', 'rounds', 'lessons', 'ratings', 'watched']) { existing[t] = await db[t].where('playerId').equals(p).toArray(); await db[t].where('playerId').equals(p).delete(); }
+  await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.practice, db.academy, db.ratings, db.watched, async () => {
+    for (const t of ['goals', 'sessions', 'rounds', 'lessons', 'practice', 'ratings', 'watched']) { existing[t] = await db[t].where('playerId').equals(p).toArray(); await db[t].where('playerId').equals(p).delete(); }
     if (library) { existing.academy = await db.academy.where('playerId').equals(lib).toArray(); await db.academy.where('playerId').equals(lib).delete(); }
     const cur = await db.players.get(p);
     await db.players.put({ ...(cur || {}), ...(data.player || {}), id: p });
@@ -90,7 +91,7 @@ export async function importAll(data, { library = true } = {}) {
     await db.ratings.bulkPut(ratingsRows); await db.watched.bulkPut(watchedRows);
   });
   // Mirror: deletes for what was there, puts for what is now.
-  for (const t of ['goals', 'sessions', 'rounds', 'lessons']) { for (const r of existing[t]) await cloudDel(p, t, r.id); for (const r of rows[t]) await cloudPut(p, t, r); }
+  for (const t of ['goals', 'sessions', 'rounds', 'lessons', 'practice']) { for (const r of existing[t]) await cloudDel(p, t, r.id); for (const r of rows[t]) await cloudPut(p, t, r); }
   for (const r of existing.ratings) await cloudDel(p, 'ratings', r.node); for (const r of ratingsRows) await cloudPut(p, 'ratings', r);
   for (const r of existing.watched) await cloudDel(p, 'watched', r.lessonId); for (const r of watchedRows) await cloudPut(p, 'watched', r);
   if (library) { for (const r of existing.academy) await libDel(lib, r.id); for (const r of ac) await libPut(lib, r); }

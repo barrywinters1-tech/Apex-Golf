@@ -10,6 +10,7 @@ import LaunchWindow from '../charts/LaunchWindow.jsx';
 import ImpactClock from '../charts/ImpactClock.jsx';
 import { Field, num, formData } from './ui.jsx';
 import Sheet from './Sheet.jsx';
+import GamePlan from './GamePlan.jsx';
 
 const METRICS = [['chs', 'Club speed', 1], ['bs', 'Ball speed', 1], ['smash', 'Smash factor', 2], ['carry', 'Carry', 0], ['total', 'Total', 0], ['spin', 'Spin', 0], ['launch', 'Launch angle', 1], ['side', 'Side dispersion', 0], ['aoa', 'Attack angle', 1], ['path', 'Club path', 1], ['ftp', 'Face to path', 1]];
 const CLUBS = ['Driver', '3 Wood', '5 Wood', 'Hybrid', '4 Iron', '5 Iron', '6 Iron', '7 Iron', '8 Iron', '9 Iron', 'PW', 'Gap Wedge', 'SW', 'LW'];
@@ -98,6 +99,8 @@ export default function TrackMan({ sessions, goals }) {
         <div className="tile accuracy"><div className="lbl">Ball speed</div><div className="val">{fmt(row.bs, 1)}<small>mph</small></div>{isDriver && <div className="bench">D1 ~{B.bs.d1} · Tour ~{B.bs.tour}</div>}</div>
         </div>
       </div>}
+
+      <GamePlan sessions={sessions} />
 
       <div className="grid grid-2" style={{ marginTop: 14 }}>
       <div className="card">

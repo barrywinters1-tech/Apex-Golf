@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Rings from '../charts/Rings.jsx';
 import LineChart from '../charts/LineChart.jsx';
-import BarChart from '../charts/BarChart.jsx';
 import Waterfall from '../charts/Waterfall.jsx';
 import { rounds as repo } from '../db/repo.js';
 import { BENCHMARKS as B } from '../db/index.js';
@@ -53,6 +52,7 @@ export default function OnCourse({ rounds, goals }) {
               <div><div className="k">Putts</div><div className="v">{lr.putts ?? '—'}</div></div>
               <div><div className="k">Up & down</div><div className="v">{lr.upDown ?? '—'}<small>/{lr.upDownOf ?? '—'}</small></div></div>
               <div><div className="k">Penalties</div><div className="v">{lr.pen ?? '—'}</div></div>
+              {lr.mm != null && <div><div className="k">Mental mistakes</div><div className="v">{lr.mm}</div></div>}
             </div>
             <Waterfall par={lr.par} score={lr.score} steps={sg.map(x => ({ label: x.label.replace('Off the tee', 'Tee').replace('Around green', 'Around'), v: x.v }))} />
             {worst && <div className="sc-note">Biggest leak: <b>{worst.label}</b> ({sgn(worst.v)}). That's where the next practice block goes.</div>}
@@ -97,7 +97,7 @@ export default function OnCourse({ rounds, goals }) {
       </div>
 
       <Sheet open={sheet} title="Add round" onClose={() => setSheet(false)}>
-        <form className="fields" onSubmit={async e => { e.preventDefault(); const d = formData(e.target); await repo.add({ date: d.date, course: d.course.trim(), par: num(d.par) ?? 72, score: num(d.score), fir: num(d.fir), firOf: num(d.firOf) ?? 14, gir: num(d.gir), putts: num(d.putts), upDown: num(d.upDown), upDownOf: num(d.upDownOf), pen: num(d.pen), sgT: num(d.sgT), sgA: num(d.sgA), sgG: num(d.sgG), sgP: num(d.sgP), source: 'manual' }); setSheet(false); }}>
+        <form className="fields" onSubmit={async e => { e.preventDefault(); const d = formData(e.target); await repo.add({ date: d.date, course: d.course.trim(), par: num(d.par) ?? 72, score: num(d.score), fir: num(d.fir), firOf: num(d.firOf) ?? 14, gir: num(d.gir), putts: num(d.putts), upDown: num(d.upDown), upDownOf: num(d.upDownOf), pen: num(d.pen), mm: num(d.mm), sgT: num(d.sgT), sgA: num(d.sgA), sgG: num(d.sgG), sgP: num(d.sgP), source: 'manual' }); setSheet(false); }}>
           <Field id="r-date" label="Date"><input id="r-date" name="date" type="date" required /></Field>
           <Field id="r-course" label="Course" className="wide"><input id="r-course" name="course" required /></Field>
           <Field id="r-par" label="Par"><input id="r-par" name="par" type="number" defaultValue="72" inputMode="numeric" /></Field>
@@ -109,6 +109,7 @@ export default function OnCourse({ rounds, goals }) {
           <Field id="r-ud" label="Up & downs"><input id="r-ud" name="upDown" type="number" inputMode="numeric" /></Field>
           <Field id="r-udof" label="of"><input id="r-udof" name="upDownOf" type="number" inputMode="numeric" /></Field>
           <Field id="r-pen" label="Penalties"><input id="r-pen" name="pen" type="number" inputMode="numeric" /></Field>
+          <Field id="r-mm" label="Mental mistakes"><input id="r-mm" name="mm" type="number" inputMode="numeric" placeholder="shots not 100% committed" /></Field>
           <Field id="r-sgt" label="SG off tee"><input id="r-sgt" name="sgT" type="number" step="0.1" inputMode="decimal" /></Field>
           <Field id="r-sga" label="SG approach"><input id="r-sga" name="sgA" type="number" step="0.1" inputMode="decimal" /></Field>
           <Field id="r-sgg" label="SG around green"><input id="r-sgg" name="sgG" type="number" step="0.1" inputMode="decimal" /></Field>

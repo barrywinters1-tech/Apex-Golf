@@ -11,7 +11,7 @@
 import { db } from './index.js';
 import { supabase } from '../lib/supabase.js';
 
-const TABLES = ['goals', 'sessions', 'rounds', 'lessons'];
+const TABLES = ['goals', 'sessions', 'rounds', 'lessons', 'practice'];
 const remoteId = (tbl, row) => tbl === 'blueprint' ? 'blueprint' : tbl === 'player' ? 'player' : tbl === 'ratings' ? row.node : tbl === 'watched' ? row.lessonId : row.id;
 
 let flushing = null;
@@ -57,7 +57,7 @@ export async function pullPlayer(playerId, playerMeta = {}) {
   const { data, error } = await supabase.from('rows').select('tbl,id,data').eq('player_id', playerId);
   if (error) throw error;
   const by = {}; for (const r of data) (by[r.tbl] = by[r.tbl] || []).push(r);
-  await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.ratings, db.watched, async () => {
+  await db.transaction('rw', db.players, db.blueprint, db.goals, db.sessions, db.rounds, db.lessons, db.practice, db.ratings, db.watched, async () => {
     for (const t of [...TABLES, 'ratings', 'watched']) await db[t].where('playerId').equals(playerId).delete();
     await db.blueprint.delete(playerId);
     const p = by.player?.[0]?.data || {};

@@ -464,3 +464,32 @@ svg.clock .ball { fill: #fff; stroke: var(--ink-3); }
 .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--strike); display: inline-block; margin-left: 2px; }
 .sync-dot.off { background: var(--ink-3); }
 .video video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+
+/* Practice */
+.pill.ok { background: rgba(52,199,89,0.16); color: var(--good); }
+.pill.warn { background: rgba(255,59,48,0.12); color: var(--bad); }
+.prio { align-items: flex-start; }
+.prio-rank { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-family: ui-rounded, system-ui; font-weight: 700; font-size: 15px; background: rgba(118,118,128,0.14); color: var(--ink-2); flex: 0 0 auto; }
+.prio-rank.first { background: var(--speed); color: #fff; }
+.test-score { font-family: ui-rounded, system-ui; font-weight: 700; font-size: 40px; line-height: 1; color: var(--accuracy); min-width: 64px; }
+.test-row { display: grid; grid-template-columns: minmax(84px, 1fr) 1fr 1fr auto; gap: 8px; align-items: center; }
+.test-row input { width: 100%; border: 0; background: var(--bg); border-radius: 12px; padding: 10px 12px; font-size: 16px; color: var(--ink); min-width: 0; }
+.test-row input:focus { outline: none; box-shadow: 0 0 0 3px rgba(0,122,255,0.35); }
+.yb { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14.5px; }
+.yb th { text-align: left; font-size: 12px; font-weight: 600; color: var(--ink-3); padding: 6px 8px; }
+.yb td { padding: 9px 8px; border-top: 0.5px solid var(--line); }
+.yb td.go { font-family: ui-rounded, system-ui; font-weight: 700; font-size: 18px; }
+.yb-wrap { overflow-x: auto; }
+@media print {
+  .topbar, .tabbar, .page-head .btn, .no-print { display: none !important; }
+  body, .app, .page { background: #fff !important; }
+}
+.plan-line { display: flex; align-items: baseline; gap: 6px; font-size: 13px; color: var(--ink-2); margin-top: 4px; line-height: 1.35; }
+.plan-line .mode-dot { margin: 0; transform: translateY(1px); }
+.plan-line .num { min-width: 44px; font-weight: 600; color: var(--ink); }
+@media (max-width: 760px) {
+  .tabbar { padding-left: 4px; padding-right: 4px; }
+  .tabbar button { min-width: 0; font-size: 9.5px; padding-left: 0; padding-right: 0; overflow: hidden; }
+  .tabbar svg { width: 24px; height: 24px; }
+}
+@media (max-width: 760px) { .tabbar button span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }

@@ -26,6 +26,9 @@ db.version(1).stores({
   meta:      'key',
   outbox:    '++pk, at',                                     // pending cloud writes
 });
+db.version(2).stores({
+  practice:  'id, playerId, date',                           // practice blocks + scored tests (kind: 'block' | 'test')
+});
 
 export const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = (Math.random() * 16) | 0; return (c === 'x' ? r : (r & 3) | 8).toString(16); }));
 

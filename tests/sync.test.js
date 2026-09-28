@@ -54,6 +54,20 @@ describe('cloud mirror', () => {
     expect(await db.sessions.where('playerId').equals('p2').count()).toBe(1);
   });
 
+  it('practice logs and tests mirror, pull and survive export/import', async () => {
+    repo.setScope({ playerId: 'p1', libraryId: 'c' });
+    const id = await repo.practice.add({ kind: 'test', test: 'approach9', date: '2026-09-28', shots: [{ carry: 130, side: 0 }] });
+    await sync.flush();
+    expect(store.rows.get(`p1|practice|${id}`).data.test).toBe('approach9');
+    await db.practice.clear();
+    await sync.pullPlayer('p1');
+    expect((await repo.practice.list()).map(x => x.id)).toEqual([id]);
+    const exp = await repo.exportAll();
+    expect(exp.practice).toHaveLength(1);
+    await repo.importAll(exp, { library: false });
+    expect(await repo.practice.list()).toHaveLength(1);
+  });
+
   it('importAll re-homes a share-link export under the current player and mirrors it', async () => {
     repo.setScope({ playerId: 'p1', libraryId: 'me' });
     await repo.importAll({ sessions: [{ id: 7, date: '2026-02-02', club: 'Driver' }], goals: [], rounds: [], lessons: [], academy: [{ id: 3, node: 'n', title: 'L' }], watched: [{ lessonId: 3 }], player: { name: 'Barry' } });
