@@ -5,6 +5,7 @@ import { uuid } from '../db/index.js';
 import { academy as repo, ratings as ratingRepo, watched as watchedRepo } from '../db/repo.js';
 import { Field, lines, formData } from './ui.jsx';
 import Sheet from './Sheet.jsx';
+import { removeWithUndo } from '../lib/undo.js';
 
 /** Some hosts (the Claude preview) block third-party frames and images by CSP. Probe once with a YouTube thumbnail. */
 let embedProbe = null;
@@ -83,7 +84,7 @@ export default function Academy({ lessons = [], ratings = [], watched = [], isCo
               {play.url && !isVideoFile(play.url) && <a className="btn quiet" href={play.url} target="_blank" rel="noreferrer" style={{ marginTop: 6, display: 'inline-block' }}>Open in YouTube ↗</a>}
               {play.notes && <p className="tl-notes" style={{ marginTop: 10 }}>{play.notes}</p>}
               {play.drills?.length > 0 && <div style={{ marginTop: 8 }}><div className="tl-k">Drills</div>{play.drills.map((d, i) => <span className="tag" key={i}>{d}</span>)}</div>}
-              {isCoach && <div className="tl-foot"><button className="btn danger" onClick={() => { repo.remove(play.id); setPlay(null); }}>Remove</button></div>}
+              {isCoach && <div className="tl-foot"><button className="btn danger" onClick={() => { removeWithUndo(repo, play.id, 'Lesson removed'); setPlay(null); }}>Remove lesson</button></div>}
             </div>
           )}
           <div className="group">

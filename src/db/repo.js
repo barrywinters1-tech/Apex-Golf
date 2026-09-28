@@ -29,6 +29,7 @@ export const blueprint = {
 };
 
 const perPlayer = (tbl, sortKey) => ({
+  get: id => db[tbl].get(id),
   list: () => sortKey ? db[tbl].where('playerId').equals(P()).sortBy(sortKey) : db[tbl].where('playerId').equals(P()).toArray(),
   add: async r => { const row = stamp({ ...r, playerId: P() }); await db[tbl].add(row); await cloudPut(P(), tbl, row); return row.id; },
   bulkAdd: async arr => { const rows = arr.map(r => stamp({ ...r, playerId: P() })); await db[tbl].bulkAdd(rows); for (const row of rows) await cloudPut(P(), tbl, row); return rows.length; },
@@ -44,6 +45,7 @@ export const practice = perPlayer('practice', 'date');
 
 /** Academy lessons live in the coach's library, shared by every player they coach. */
 export const academy = {
+  get: id => db.academy.get(id),
   list: () => db.academy.where('playerId').equals(L()).sortBy('order'),
   add: async l => { const row = stamp({ ...l, playerId: L(), order: l.order ?? Date.now() }); await db.academy.add(row); await libPut(L(), row); return row.id; },
   update: async (id, patch) => { await db.academy.update(id, patch); const row = await db.academy.get(id); if (row) await libPut(row.playerId, row); },

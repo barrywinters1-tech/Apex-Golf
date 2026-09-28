@@ -4,7 +4,8 @@ import { PRACTICE_MODES } from '../lib/knowledge.js';
 import { RATING } from '../lib/academy.js';
 import { AREAS, priorities, weeklyPlan, weekLogged, approachReadiness, TESTS, scoreTest } from '../lib/practice.js';
 import { fmt, shortDate } from '../lib/stats.js';
-import { Field, num } from './ui.jsx';
+import { Field, num, DeleteButton } from './ui.jsx';
+import { removeWithUndo } from '../lib/undo.js';
 import Sheet from './Sheet.jsx';
 
 const MODE_LABEL = Object.fromEntries(PRACTICE_MODES.map(([k, l]) => [k, l]));
@@ -38,7 +39,7 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
         <div><div className="date-line">Between lessons</div><h1>Practice</h1></div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="btn" onClick={() => setTestSheet(true)}>Take test</button>
-          <button className="btn primary" onClick={() => setLogSheet({})}>Log practice</button>
+          <button className="btn accent" onClick={() => setLogSheet({})}>Log practice</button>
         </div>
       </div>
 
@@ -57,7 +58,7 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
             </div>
           )) : <div className="empty">Log a round (with strokes gained if you have it) to rank what to work on.</div>}
           {topLessons.length > 0 && <div className="row"><div className="grow"><div className="label">Unwatched in the Academy for this</div><div>{topLessons.map(l => <span className="tag" key={l.id}>{l.title}</span>)}</div></div></div>}
-          <div className="row"><div className="sub">Priority = need × (0.5 + room to improve) × trend. Need is strokes lost, or the gap to target when a round has no strokes gained. Room is 1 − Jack's rating ÷ 3.</div></div>
+          <details className="how"><summary>How this is ranked</summary><p>Priority = need × (0.5 + room to improve) × trend. Need is strokes lost per round, or the gap to target when a round has no strokes gained. Room is 1 − Jack's rating ÷ 3, so what he rates as owned drops down the list. Worsening areas get a 1.2× nudge.</p></details>
         </div>
 
         <div className="group">
@@ -82,7 +83,7 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
               </div>
             );
           }) : <div className="empty">No plan yet — it builds itself once there's a round to rank.</div>}
-          <div className="row"><div className="sub">Week from {shortDate(week.start)} · {week.total} min logged. Mode mix follows Jack's rating: low rating → more Technique, owned → mostly Performance.</div></div>
+          <details className="how"><summary>Week from {shortDate(week.start)} · {week.total} min logged</summary><p>Minutes go to the top three areas in proportion to priority. The Technique / Skill / Performance mix follows Jack's rating: low → more Technique, owned → mostly Performance. His blueprint drills come first.</p></details>
         </div>
       </div>
 
@@ -98,7 +99,7 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
               {r.target && <span className={`pill ${r.prox <= r.target ? 'ok' : 'warn'}`}>{r.prox <= r.target ? 'on target' : `+${fmt(r.prox - r.target)} ft`}</span>}
             </div>
           )) : <div className="empty">Import a TrackMan CSV with irons or wedges to see this.</div>}
-          <div className="row"><div className="sub">Best case: assumes perfect aim and yardage on a flat range, so the course will read worse. Range balls widen the pattern.</div></div>
+          <details className="how"><summary>What this measures</summary><p>How tightly each club's shots finish around their own centre, against Jack's proximity target for that distance. It's the best case — perfect aim and yardage on a flat range — so the course will read worse. Range balls widen the pattern.</p></details>
         </div>
 
         <div className="group">
@@ -116,7 +117,7 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
             ))}
             {tests.length > 1 && <div className="row"><div className="sub num">History: {tests.map(t => fmt(scoreTest(t.test, t.shots)?.score)).join(' → ')}</div></div>}
           </> : <div className="empty">{TESTS.approach9.blurb} Take it monthly; the score is your benchmark.</div>}
-          <div className="row"><div className="sub">Each ball: 100 − 2 × (miss ÷ target distance, %). Short misses count 1.25×. Our formula, not TrackMan's Combine.</div></div>
+          <details className="how"><summary>How it's scored</summary><p>Each ball scores 100 − 2 × (miss ÷ target distance, as a %). Short misses count 1.25× because short is the costly miss on approach. It's our formula, not TrackMan's Combine — compare it with your own history.</p></details>
         </div>
       </div>
 
@@ -126,14 +127,14 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
           <div className="row" key={p.id}>
             <i className={`mode-dot ${p.mode}`} />
             <div className="grow"><div className="label">{AREA_LABEL[p.area] || p.area} · {MODE_LABEL[p.mode] || p.mode} · {p.minutes} min</div><div className="sub">{p.date}{p.drill ? ` · ${p.drill}` : ''}{p.notes ? ` · ${p.notes}` : ''}</div></div>
-            <button className="btn danger" onClick={() => repo.remove(p.id)}>Remove</button>
+            <DeleteButton label="Delete practice" onClick={() => removeWithUndo(repo, p.id, 'Practice deleted')} />
           </div>
         ))}
         {tests.slice().reverse().slice(0, showAll ? 99 : 2).map(t => (
           <div className="row" key={t.id}>
             <i className="mode-dot performance" />
             <div className="grow"><div className="label">{TESTS[t.test]?.label || 'Test'} · {fmt(scoreTest(t.test, t.shots)?.score)}</div><div className="sub">{t.date}{t.notes ? ` · ${t.notes}` : ''}</div></div>
-            <button className="btn danger" onClick={() => repo.remove(t.id)}>Remove</button>
+            <DeleteButton label="Delete test" onClick={() => removeWithUndo(repo, t.id, 'Test deleted')} />
           </div>
         ))}
         {!practice.length && <div className="empty">Nothing logged yet. Jack sees what you actually practised, not just what you watched.</div>}
@@ -145,7 +146,7 @@ export default function Practice({ rounds, sessions, ratings, bp, practice, acad
   );
 }
 
-function LogSheet({ prefill, onClose }) {
+export function LogSheet({ prefill, onClose }) {
   const p = prefill || {};
   return (
     <Sheet open={!!prefill} title="Log practice" onClose={onClose}>

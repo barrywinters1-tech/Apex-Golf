@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { phi, priorities, weeklyPlan, modeMix, weekLogged, yardageBook, gamePlan, approachReadiness, shotScore, scoreTest, coachDrills } from '../src/lib/practice.js';
+import { nextBlock, phi, priorities, weeklyPlan, modeMix, weekLogged, yardageBook, gamePlan, approachReadiness, shotScore, scoreTest, coachDrills } from '../src/lib/practice.js';
 import { nodeId } from '../src/lib/academy.js';
 
 const round = (o = {}) => ({ par: 72, score: 82, fir: 7, firOf: 14, gir: 7, putts: 33, upDown: 3, upDownOf: 8, ...o });
@@ -72,5 +72,13 @@ describe('practice engine', () => {
     expect(shotScore(150, 140, 0)).toBeLessThan(shotScore(150, 160, 0));
     const t = scoreTest('approach9', [{ carry: 130, side: 0 }, { carry: 125, side: 3 }]);
     expect(t.done).toBe(2); expect(t.bands[0].goal).toBe(18); expect(t.bands[1].prox).toBeNull();
+  });
+
+  it('next block is the top area\'s mode with most minutes left, then moves on', () => {
+    const plan = [{ area: 'approach', mode: 'technique', minutes: 45 }, { area: 'approach', mode: 'skill', minutes: 60 }, { area: 'tee', mode: 'skill', minutes: 20 }];
+    expect(nextBlock(plan, { by: {} })).toMatchObject({ area: 'approach', mode: 'skill', left: 60 });
+    expect(nextBlock(plan, { by: { 'approach|skill': 50 } })).toMatchObject({ mode: 'technique', left: 45 });
+    expect(nextBlock(plan, { by: { 'approach|skill': 60, 'approach|technique': 45 } })).toMatchObject({ area: 'tee' });
+    expect(nextBlock(plan, { by: { 'approach|skill': 60, 'approach|technique': 45, 'tee|skill': 20 } })).toBeNull();
   });
 });

@@ -3,7 +3,8 @@ import { lessons as repo } from '../db/repo.js';
 import { aiConfigured, summariseLesson } from '../lib/ai.js';
 import { matrixText } from '../lib/blueprint.js';
 import { PRACTICE_MODES, SHOT_ROUTINE } from '../lib/knowledge.js';
-import { Field, lines } from './ui.jsx';
+import { Field, lines, DeleteButton } from './ui.jsx';
+import { removeWithUndo } from '../lib/undo.js';
 import Sheet from './Sheet.jsx';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -85,7 +86,7 @@ export default function Lessons({ lessons, bp, goals }) {
                 {l.priorities?.length > 0 && <div>{l.priorities.map((x, i) => <span className="tag" key={i}>{x}</span>)}</div>}
                 <div className="tl-foot">
                   {l.coachnowUrl && <a className="btn quiet" href={l.coachnowUrl} target="_blank" rel="noreferrer">Open in CoachNow ↗</a>}
-                  <button className="btn danger" onClick={() => repo.remove(l.id)}>Remove</button>
+                  <DeleteButton label={`Delete lesson: ${l.focus}`} onClick={() => removeWithUndo(repo, l.id, 'Lesson deleted')} />
                 </div>
               </div>
             </div>); }) : <div className="empty">No lessons logged yet.</div>}

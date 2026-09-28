@@ -58,7 +58,7 @@ export default function Data({ examples, counts = {}, cloud = false, isCoach = t
         <div className="share-actions">
           <button className="btn share-btn" onClick={async () => { const u = await encodeShare(await exportAll()); setShare(u); try { await navigator.clipboard.writeText(u); setSstatus(`Link copied · ${(u.length / 1024).toFixed(1)} KB`); } catch { setSstatus('Copy the link below.'); } }}>Create share link</button>
           {share && navigator.share && <button className="btn share-btn" onClick={() => navigator.share({ title: 'Apex Golf — my roadmap', url: share }).catch(() => {})}>Send…</button>}
-          <span className="status" style={{ color: 'rgba(255,255,255,0.85)' }}>{sstatus}</span>
+          <span className="status" style={{ color: 'inherit', opacity: 0.85 }}>{sstatus}</span>
         </div>
         {share && <input readOnly value={share} onFocus={e => e.target.select()} className="share-url" aria-label="Share link" />}
       </div>

@@ -8,7 +8,8 @@ import { impactReport } from '../lib/knowledge.js';
 import FlightView from '../charts/FlightView.jsx';
 import LaunchWindow from '../charts/LaunchWindow.jsx';
 import ImpactClock from '../charts/ImpactClock.jsx';
-import { Field, num, formData } from './ui.jsx';
+import { Field, num, formData, DeleteButton } from './ui.jsx';
+import { removeWithUndo } from '../lib/undo.js';
 import Sheet from './Sheet.jsx';
 import GamePlan from './GamePlan.jsx';
 
@@ -37,7 +38,7 @@ export default function TrackMan({ sessions, goals }) {
   return (
     <div className="fade-in">
       <div className="page-head">
-        <div><div className="date-line">Launch monitor</div><h1>TrackMan</h1></div>
+        <div><div className="date-line">TrackMan · launch monitor</div><h1>Range</h1></div>
         <button className="btn primary" onClick={() => setSheet(true)}>Add session</button>
       </div>
 
@@ -120,7 +121,7 @@ export default function TrackMan({ sessions, goals }) {
             <tr key={s.id}>
               <td>{s.date}</td><td>{s.club}</td><td className="r">{s.shots ?? '—'}</td><td className="r">{fmt(s.chs, 1)}</td><td className="r">{fmt(s.bs, 1)}</td><td className="r">{fmt(s.smash, 2)}</td><td className="r">{fmt(s.carry)}</td><td className="r">{fmt(s.total)}</td><td className="r">{fmt(s.side)}</td><td className="r">{sgn(s.path)}</td><td className="r">{sgn(s.ftp)}</td>
               <td className="muted small">{s.source}{s.notes ? ` · ${s.notes}` : ''}</td>
-              <td><button className="btn danger" onClick={() => repo.remove(s.id)}>Remove</button></td>
+              <td><DeleteButton label={`Delete ${s.club} session`} onClick={() => removeWithUndo(repo, s.id, 'Session deleted')} /></td>
             </tr>))}</tbody>
         </table></div>}
       </div>

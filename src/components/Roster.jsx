@@ -3,7 +3,7 @@ import Sheet from './Sheet.jsx';
 import { Field } from './ui.jsx';
 
 /** Coach's player list + account. Opens from the player chip in the top bar. */
-export default function Roster({ open, onClose, session }) {
+export default function Roster({ open, onClose, session, onData }) {
   const { players = [], current, isCoach, profile, user, selectPlayer, addPlayer, signOut, cloud } = session;
   const [adding, setAdding] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -13,6 +13,7 @@ export default function Roster({ open, onClose, session }) {
   if (!cloud) return (
     <Sheet open={open} title="This device" onClose={onClose}>
       <p className="sub">Running offline — data lives in this browser only. Add Supabase keys to the deployment to enable sign-in, a coach roster and video uploads.</p>
+      <div className="group"><button className="row tappable sheet-link" onClick={onData}><div className="grow"><div className="label">Data, import and sharing</div><div className="sub">TrackMan CSV, backup, share link</div></div><span aria-hidden="true">›</span></button></div>
     </Sheet>
   );
 
@@ -39,6 +40,7 @@ export default function Roster({ open, onClose, session }) {
       )}
       <div className="group">
         <div className="row"><div className="grow"><div className="label">{profile?.name || user?.email}</div><div className="sub">{user?.email} · {isCoach ? 'Coach' : 'Player'}</div></div></div>
+        <button className="row tappable sheet-link" onClick={onData}><div className="grow"><div className="label">Data, import and sharing</div><div className="sub">TrackMan CSV, backup, share link</div></div><span aria-hidden="true">›</span></button>
         <div className="row"><button className="btn" onClick={signOut}>Sign out</button></div>
       </div>
       {busy && <p className="status" style={{ marginTop: 10 }}>Loading…</p>}

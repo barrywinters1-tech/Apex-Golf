@@ -243,3 +243,16 @@ export function scoreTest(testKey, shots = []) {
   });
   return { score: done.length ? mean(done.map(r => r.score)) : null, done: done.length, of: rows.length, rows, bands };
 }
+
+/**
+ * The one block to do next: in priority order, the first area with minutes left,
+ * and within it the mode with the most left. Null when the week's plan is done.
+ */
+export function nextBlock(plan = [], week = { by: {} }) {
+  const left = b => b.minutes - (week.by[`${b.area}|${b.mode}`] || 0);
+  for (const area of [...new Set(plan.map(b => b.area))]) {
+    const open = plan.filter(b => b.area === area && left(b) > 0).sort((a, b) => left(b) - left(a));
+    if (open.length) return { ...open[0], left: left(open[0]) };
+  }
+  return null;
+}

@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import Rings from '../charts/Rings.jsx';
+import Meters from './Meters.jsx';
 import LineChart from '../charts/LineChart.jsx';
 import Waterfall from '../charts/Waterfall.jsx';
 import { rounds as repo } from '../db/repo.js';
 import { BENCHMARKS as B } from '../db/index.js';
 import { roundSummary, goalFor, fmt, sgn, shortDate } from '../lib/stats.js';
-import { Field, num, formData } from './ui.jsx';
+import { Field, num, formData, DeleteButton } from './ui.jsx';
+import { removeWithUndo } from '../lib/undo.js';
 import Sheet from './Sheet.jsx';
 
 export default function OnCourse({ rounds, goals }) {
@@ -17,31 +18,23 @@ export default function OnCourse({ rounds, goals }) {
   const sg = lr && [lr.sgT, lr.sgA, lr.sgG, lr.sgP].some(v => v != null)
     ? [['Off the tee', lr.sgT], ['Approach', lr.sgA], ['Around green', lr.sgG], ['Putting', lr.sgP]].filter(x => x[1] != null).map(([label, v]) => ({ label, v })) : [];
   const rings = [
-    { key: 'speed', label: 'Fairways', value: s.fir, target: 70, unit: '%', color: 'var(--speed)', dec: 0, why: 'Last 5 rounds · target 70%' },
-    { key: 'strike', label: 'Greens', value: s.gir, target: B.gir.d1, unit: '%', color: 'var(--strike)', dec: 0, why: `Last 5 rounds · D1 ~${B.gir.d1}%` },
-    { key: 'accuracy', label: 'Up & down', value: s.upDown, target: 60, unit: '%', color: 'var(--accuracy)', dec: 0, why: 'Last 5 rounds · target 60%' },
+    { key: 'speed', label: 'Fairways', value: s.fir, target: 70, unit: '%', color: 'var(--speed)', dec: 0, why: 'Fairways hit' },
+    { key: 'strike', label: 'Greens', value: s.gir, target: B.gir.d1, unit: '%', color: 'var(--strike)', dec: 0, why: `Greens in regulation · D1 ~${B.gir.d1}%` },
+    { key: 'accuracy', label: 'Up & down', value: s.upDown, target: 60, unit: '%', color: 'var(--accuracy)', dec: 0, why: 'Up and down saves' },
   ];
   const worst = sg.length ? sg.reduce((a, b) => (b.v < a.v ? b : a)) : null;
 
   return (
     <div className="fade-in">
       <div className="page-head">
-        <div><div className="date-line">Scoring</div><h1>On-course</h1></div>
+        <div><div className="date-line">Rounds and scoring</div><h1>Course</h1></div>
         <button className="btn primary" onClick={() => setSheet(true)}>Add round</button>
       </div>
 
       <div className="grid grid-hero">
-        <div className="card rings-card">
-          <Rings rings={rings} size={236} />
-          <div className="ring-list">
-            {rings.map(r => (
-              <div className={`ring-item ${r.key}`} key={r.key}>
-                <div className="k">{r.label}</div>
-                <div className="v">{fmt(r.value, r.dec)}<span className="of">/{r.target}</span> <small>{r.unit}</small></div>
-                <div className="why">{r.why}</div>
-              </div>
-            ))}
-          </div>
+        <div className="sheetpage">
+          <div className="sheet-title"><h3>Last five rounds</h3><span className="hint">{rounds.length} logged</span></div>
+          <Meters items={rings.map(r => ({ ...r, colour: r.key }))} />
         </div>
         <div className="scorecard">
           {lr ? <>
@@ -89,7 +82,7 @@ export default function OnCourse({ rounds, goals }) {
             <div className="row" key={r.id}>
               <div className="sc-mini">{r.score}<small>{r.score - r.par >= 0 ? '+' : ''}{r.score - r.par}</small></div>
               <div className="grow"><div className="label">{r.course} {r.source === 'example' && <span className="pill example">example</span>}</div><div className="sub num">{r.date} · FIR {r.fir ?? '—'}/{r.firOf ?? '—'} · GIR {r.gir ?? '—'} · putts {r.putts ?? '—'}</div></div>
-              <button className="btn danger" onClick={() => repo.remove(r.id)}>Remove</button>
+              <DeleteButton label={`Delete round at ${r.course}`} onClick={() => removeWithUndo(repo, r.id, 'Round deleted')} />
             </div>
           ))}
           {!rounds.length && <div className="empty">No rounds yet.</div>}

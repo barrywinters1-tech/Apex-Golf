@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { players, blueprint as bpRepo, goals as goalRepo } from '../db/repo.js';
 import { BENCHMARKS as B } from '../db/index.js';
 import { fmt, goalProgress, roundSummary, driverSessions } from '../lib/stats.js';
-import { Field, num, formData } from './ui.jsx';
+import { Field, num, formData, DeleteButton } from './ui.jsx';
+import { removeWithUndo } from '../lib/undo.js';
 import Sheet from './Sheet.jsx';
 import { BP_ROWS, BP_COLS, BP_AREAS, MENTAL, cell, mcell, emptyBlueprint, parseBlueprintGrid } from '../lib/blueprint.js';
 
@@ -120,7 +121,7 @@ export default function Blueprint({ player, bp, goals, sessions = [], rounds = [
         <div className="group">
           <div className="group-title"><h3>Goals</h3><button className="btn" onClick={() => setSheet(true)}>Add goal</button></div>
           {goals.length ? goals.map(g => (
-            <div className="row" key={g.id}>
+            <div className="row goal-row" key={g.id}>
               <div className="grow">
                 <div className="label">{g.metric} <span className="muted small">· {g.area}</span> {g.source === 'example' && <span className="pill example">example</span>}</div>
                 <div className="sub num">Baseline {fmt(g.baseline, 2).replace(/\.?0+$/, '')} → target {fmt(g.target, 2).replace(/\.?0+$/, '')} {g.unit}{g.by ? ` by ${g.by}` : ''}</div>
@@ -128,7 +129,7 @@ export default function Blueprint({ player, bp, goals, sessions = [], rounds = [
               </div>
               <label className="small muted" htmlFor={`cur-${g.id}`}>now</label>
               <input id={`cur-${g.id}`} className="inline-input" type="number" step="any" defaultValue={g.current ?? ''} onBlur={e => goalRepo.update(g.id, { current: num(e.target.value) })} />
-              <button className="btn danger" onClick={() => goalRepo.remove(g.id)} aria-label="Remove goal">Remove</button>
+              <DeleteButton label={`Delete goal: ${g.metric}`} onClick={() => removeWithUndo(goalRepo, g.id, 'Goal deleted')} />
             </div>
           )) : <div className="empty">No goals yet.</div>}
         </div>
